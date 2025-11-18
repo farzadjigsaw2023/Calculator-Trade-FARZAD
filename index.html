@@ -8,17 +8,17 @@
 <style>
     /* Global Styles & Variables */
     :root {
-        /* Light Mode Colors (Blue Theme) */
+        /* Light Mode Colors */
         --bg-color: #f8f9fa; /* Light background */
         --text-color: #212529; /* Dark text */
         --card-bg: #ffffff; /* White card */
         --input-bg: #f0f2f5; /* Light grey input */
         --label-color: #495057; /* Muted grey label */
-        --table-header: linear-gradient(45deg, #007bff, #0056b3); /* <-- RESTORED: Blue gradient header */
+        --table-header: linear-gradient(45deg, #007bff, #0056b3); /* Blue gradient header */
         --table-bg: #ffffff; /* White table rows */
         --hover-bg: #e9ecef; /* Light grey hover */
-        --result-bg: #e6f7ff; /* <-- RESTORED: Light blue result background */
-        --result-text: #007bff; /* <-- RESTORED: Blue result text */
+        --result-bg: #e6f7ff; /* Light blue result background */
+        --result-text: #007bff; /* Blue result text */
         --button-buy-bg: linear-gradient(45deg, #28a745, #218838); /* Green buy button */
         --button-buy-hover: linear-gradient(45deg, #218838, #28a745);
         --button-sell-bg: linear-gradient(45deg, #dc3545, #c82333); /* Red sell button */
@@ -30,24 +30,24 @@
         --dropdown-text-color: #212529;
         --copy-icon-color: #6c757d;
         --border-color: #dee2e6; /* Light grey border */
-        --focus-glow: rgba(0, 123, 255, 0.25); /* <-- RESTORED: Blue Glow */
+        --focus-glow: rgba(0, 123, 255, 0.25); /* Blue glow */
         
-        --active-currency-bg: linear-gradient(45deg, #007bff, #0056b3); /* <-- RESTORED: Blue gradient */
+        --active-currency-bg: linear-gradient(45deg, #007bff, #0056b3);
         --active-currency-color: white;
     }
 
-    /* Dark Mode Overrides (Blue Theme) */
+    /* Dark Mode Overrides */
     body.dark {
         --bg-color: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); /* Deep dark blue gradient */
         --text-color: #e0e0e0; /* Light grey text */
         --card-bg: #1f2a3c; /* Dark card */
         --input-bg: #2a3b4c; /* Darker input */
         --label-color: #bbd0e0; /* Muted light blue label */
-        --table-header: linear-gradient(45deg, #007bff, #0056b3); /* <-- RESTORED: Darker Blue gradient */
+        --table-header: linear-gradient(45deg, #3f51b5, #5c6bc0); /* Darker blue gradient header */
         --table-bg: #1f2a3c; /* Dark table rows */
         --hover-bg: #2a3b4c; /* Darker grey hover */
         --result-bg: #2a3b4c; /* Dark result background */
-        --result-text: #89b4f8; /* <-- RESTORED: Light Blue Text */
+        --result-text: #8be0ff; /* Light blue result text */
         --button-buy-bg: linear-gradient(45deg, #388e3c, #4caf50); /* Dark green buy button */
         --button-buy-hover: linear-gradient(45deg, #4caf50, #388e3c);
         --button-sell-bg: linear-gradient(45deg, #d32f2f, #ef5350); /* Dark red sell button */
@@ -58,10 +58,10 @@
         --dropdown-hover-bg: #3a4b5c;
         --dropdown-text-color: #e0e0e0;
         --copy-icon-color: #bbd0e0;
-        --border-color: #3b4c60; /* <-- RESTORED: Darker Blue/Grey border */
-        --focus-glow: rgba(137, 180, 248, 0.35); /* <-- RESTORED: Lighter Blue Glow */
+        --border-color: #3f51b5; /* Darker border */
+        --focus-glow: rgba(139, 224, 255, 0.35); /* Lighter blue glow */
         
-        --active-currency-bg: linear-gradient(45deg, #007bff, #0056b3); /* <-- RESTORED: Darker Blue Gradient */
+        --active-currency-bg: linear-gradient(45deg, #3f51b5, #5c6bc0);
         --active-currency-color: white;
     }
 
@@ -147,14 +147,14 @@
     input[type="number"]:focus,
     input[type="text"]:focus,
     .custom-select:focus {
-        border-color: #007bff; /* RESTORED: Blue border on focus */
+        border-color: #007bff;
         outline: none;
         box-shadow: 0 0 0 4px var(--focus-glow);
     }
 
     body.dark input[type="number"]:focus,
     body.dark input[type="text"]:focus {
-        border-color: #89b4f8; /* RESTORED: Light Blue border on focus in dark mode */
+        border-color: #8be0ff;
     }
 
     /* Styles for Selection Buttons (Currency & Risk) */
@@ -366,11 +366,11 @@
     }
 
     body:not(.dark) .dark-toggle {
-        background: linear-gradient(45deg, #007bff, #0056b3); /* <-- RESTORED: Blue to Blue Gradient for Toggle */
+        background: linear-gradient(45deg, #007bff, #0056b3);
     }
 
     body:not(.dark) .dark-toggle:hover {
-        background: linear-gradient(45deg, #0056b3, #007bff); /* <-- RESTORED: Blue to Blue Gradient for Toggle Hover */
+        background: linear-gradient(45deg, #0056b3, #007bff);
     }
 
     .fixed-settings-buttons button svg {
@@ -395,9 +395,9 @@
 
     /* بهبود هاور دکمه کپی */
     .copy-icon:hover {
-        fill: #007bff; /* RESTORED: Blue fill on hover */
+        fill: #007bff;
         transform: scale(1.2);
-        filter: drop-shadow(0 0 5px rgba(0, 123, 255, 0.5)); /* RESTORED: Blue Shadow */
+        filter: drop-shadow(0 0 5px rgba(0, 123, 255, 0.5));
     }
     
     /* New styles for copy message */
@@ -406,7 +406,7 @@
         top: 50%; /* Center vertically */
         right: 120%; /* Position to the left of the icon (in LTR context) */
         transform: translateY(-50%);
-        background: #007bff; /* RESTORED: Blue background for copy message */
+        background: #007bff;
         color: white;
         padding: 4px 8px;
         border-radius: 6px;
@@ -471,469 +471,6 @@
 </style>
 </head>
 <body>
-    <div class="fixed-settings-buttons">
-        <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10c0-5.52-4.48-10-10-10zm0 18a8 8 0 118-8 8 8 0 01-8 8zm0-15a7 7 0 00-6.15 10.43c.12-.47.18-.96.18-1.47 0-4.14-3.36-7.5-7.5-7.5A9.91 9.91 0 0112 5z"/></svg>
-            Toggle Dark Mode
-        </button>
-    </div>
-    <div class="container" id="mainCalculatorContainer">
-        <section id="forexCalculator">
-            <div class="input-group">
-                <label>Currency Pair</label>
-                <div class="currency-selection">
-                    <div class="currency-row">
-                        <button id="btnUSDCAD" class="currency-button active" onclick="selectCurrency('USDCAD')">CAD</button>
-                        <button id="btnUSDJPY" class="currency-button" onclick="selectCurrency('USDJPY')">JPY</button>
-                    </div>
-                    <div class="currency-row">
-                        <button id="btnAUDUSD" class="currency-button" onclick="selectCurrency('AUDUSD')">AUD</button>
-                        <button id="btnNZDUSD" class="currency-button" onclick="selectCurrency('NZDUSD')">NZD</button>
-                    </div>
-                </div>
-            </div>
-            
-            <input type="hidden" id="currencyPair" value="USDCAD">
-
-            <div class="input-group">
-                <label for="forexAccountSize">Account Size ($)</label>
-                <input type="number" id="forexAccountSize" min="0.01" step="0.01">
-            </div>
-
-            <div class="input-group">
-                <label>Risk (%)</label>
-                <div class="risk-selection">
-                    <button id="btnRisk1" class="risk-button active" onclick="selectRisk(1)">1%</button>
-                    <button id="btnRisk05" class="risk-button" onclick="selectRisk(0.5)">0.5%</button>
-                </div>
-            </div>
-            <input type="hidden" id="forexRiskPercent" value="1"> 
-            
-            <div class="input-group">
-                <label for="forexEntryPrice">Entry Price</label>
-                <input type="number" id="forexEntryPrice" min="0.00000001" step="0.00000001">
-            </div>
-            <div class="input-group">
-                <label for="forexTpPips" id="takeProfitLabel" class="profit-label">TP (Pips)</label>
-                <input type="number" id="forexTpPips" min="0.1" step="0.1">
-            </div>
-            <div class="input-group">
-                <label for="forexStopPips" id="stopLossLabel" class="loss-label">SL (Pips)</label>
-                <input type="number" id="forexStopPips" min="0.1" step="0.1">
-            </div>
-            <div class="button-group">
-                <button class="sell" onclick="calculateForex('short')">Sell</button>
-                <button class="buy" onclick="calculateForex('long')">Buy</button>
-            </div>
-        </section>
-        <div id="output" class="result" style="display: none;">
-        </div>
-    </div>
-    
-    <script>
-        // --- Utility Functions ---
-        function getRandomInRange(min, max, decimals = 2) {
-            const factor = Math.pow(10, decimals);
-            return Math.round((Math.random() * (max - min) + min) * factor) / factor;
-        }
-
-        // تابع کپی به‌روز شده
-        function copyValue(event, value) {
-            event.stopPropagation();
-            navigator.clipboard.writeText(value).then(() => {
-                const iconElement = event.currentTarget;
-                const originalInnerHTML = iconElement.innerHTML;
-                const originalFill = iconElement.style.fill;
-                
-                // Save original transform and filter style to restore them correctly
-                const originalTransform = iconElement.style.transform;
-                const originalFilter = iconElement.s        border: 1px solid var(--border-color);
-    }
-
-    label {
-        display: block;
-        text-align: left;
-        margin: 20px 0 8px;
-        font-weight: 600;
-        font-size: 16px;
-        color: var(--label-color);
-    }
-
-    input[type="number"] {
-        -moz-appearance: textfield;
-        appearance: none;
-    }
-
-    input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input[type="number"],
-    input[type="text"] {
-        width: 100%;
-        padding: 14px 18px;
-        font-size: 16px;
-        border-radius: 12px;
-        border: 1.5px solid var(--border-color);
-        background: var(--input-bg);
-        color: var(--text-color);
-        font-weight: 500;
-        transition: all 0.3s ease;
-        box-sizing: border-box;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        text-align: left;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.04);
-    }
-
-    input[type="number"]::placeholder,
-    input[type="text"]::placeholder {
-        color: #90a4ae;
-        font-style: italic;
-        text-align: left;
-    }
-
-    body.dark input[type="number"]::placeholder,
-    body.dark input[type="text"]::placeholder {
-        color: #7b8b9a;
-    }
-
-    input[type="number"]:focus,
-    input[type="text"]:focus,
-    .custom-select:focus {
-        border-color: #212529; /* CHANGED: Black border on focus */
-        outline: none;
-        box-shadow: 0 0 0 4px var(--focus-glow);
-    }
-
-    body.dark input[type="number"]:focus,
-    body.dark input[type="text"]:focus {
-        border-color: #e0e0e0; /* CHANGED: White/Light Grey border on focus in dark mode */
-    }
-
-    /* Styles for Selection Buttons (Currency & Risk) */
-    .currency-selection {
-        /* تغییر: حذف flex اصلی برای Currency Selection */
-        margin-bottom: 20px;
-    }
-    
-    .currency-row {
-        /* اضافه شده: ایجاد ردیف‌های داخلی با فلکس */
-        display: flex;
-        gap: 15px;
-        margin-bottom: 15px; /* فاصله بین ردیف‌های دکمه‌ها */
-    }
-    
-    .currency-row:last-child {
-        margin-bottom: 0;
-    }
-    
-    .risk-selection {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-
-    .currency-selection button,
-    .risk-selection button {
-        flex: 1;
-        padding: 14px 18px;
-        font-size: 16px;
-        font-weight: 600;
-        border-radius: 12px;
-        border: 1.5px solid var(--border-color);
-        background: var(--input-bg);
-        color: var(--label-color);
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    /* بهبود هاور دکمه‌های جفت ارز و ریسک */
-    .currency-selection button:hover,
-    .risk-selection button:hover {
-        background-color: var(--hover-bg); 
-        transform: translateY(-1px); /* کمی بالا آمدن */
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* افزودن سایه محو */
-        border-color: #ced4da; /* مرز کمی تیره‌تر برای کنتراست */
-    }
-
-    body.dark .currency-selection button:hover,
-    body.dark .risk-selection button:hover {
-        box-shadow: 0 4px 10px rgba(255,255,255,0.05); /* سایه در دارک مود */
-        border-color: #4a5a6a; 
-    }
-    /* ------------------------------------------ */
-
-    .currency-selection button.active,
-    .risk-selection button.active {
-        background: var(--active-currency-bg);
-        color: var(--active-currency-color);
-        border-color: transparent;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    /* Button Group */
-    .button-group {
-        display: flex;
-        gap: 15px;
-        margin-top: 30px;
-        direction: ltr; /* Ensure LTR */
-    }
-
-    button {
-        flex: 1;
-        border: none;
-        color: white;
-        padding: 15px 25px;
-        font-size: 17px;
-        font-weight: 600;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        font-family: 'Poppins', sans-serif;
-        letter-spacing: 0.5px;
-    }
-
-    button.buy {
-        background: var(--button-buy-bg);
-    }
-
-    button.buy:hover {
-        background: var(--button-buy-hover);
-        transform: translateY(-3px);
-        /* بهبود یافته: سایه بزرگتر و تیره تر */
-        box-shadow: 0 15px 30px rgba(40, 167, 69, 0.3); 
-    }
-
-    button.sell {
-        background: var(--button-sell-bg);
-    }
-
-    button.sell:hover {
-        background: var(--button-sell-hover);
-        transform: translateY(-3px);
-        /* بهبود یافته: سایه بزرگتر و تیره تر */
-        box-shadow: 0 15px 30px rgba(220, 53, 69, 0.3); 
-    }
-
-    /* Result Section */
-    .result {
-        margin-top: 40px;
-        background: var(--result-bg);
-        padding: 30px 25px;
-        border-radius: 18px;
-        font-size: 18px;
-        color: var(--result-text);
-        font-weight: 600;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        transition: background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
-        text-align: left;
-        min-height: 250px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-        flex-direction: column;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .result span {
-        font-family: 'Poppins', sans-serif;
-    }
-
-    table {
-        width: 100%;
-        max-width: 100%;
-        margin: 20px auto;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-        font-weight: 500;
-        font-size: 16px;
-        text-align: left;
-        transition: background 0.4s ease, color 0.4s ease;
-    }
-
-    th, td {
-        padding: 15px 20px;
-        border-radius: 10px;
-        background: var(--table-bg);
-        color: var(--text-color);
-        transition: background 0.4s ease, color 0.4s ease, background-color 0.3s ease;
-        text-align: left;
-        font-family: 'Poppins', sans-serif;
-        border: 1px solid var(--border-color);
-        position: relative; /* Added for tooltip positioning */
-    }
-
-    th {
-        background: var(--table-header);
-        color: white;
-        text-align: left;
-        border: none;
-        font-weight: 600;
-    }
-
-    table tr:first-child th:first-child { border-top-left-radius: 10px; }
-    table tr:first-child th:last-child { border-top-right-radius: 10px; }
-    table tr:last-child td:first-child { border-bottom-left-radius: 10px; }
-    table tr:last-child td:last-child { border-bottom-right-radius: 10px; }
-
-    tr:hover td {
-        background-color: var(--hover-bg);
-    }
-
-    /* Fixed Settings Button (Dark Mode Toggle) */
-    .fixed-settings-buttons {
-        position: fixed;
-        top: 25px;
-        right: 25px; /* Positioned to the right for LTR */
-        left: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        z-index: 1000;
-        transition: background 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .fixed-settings-buttons button {
-        width: 180px;
-        padding: 12px 18px;
-        font-size: 16px;
-        font-weight: 500;
-        border-radius: 15px;
-        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-        background: var(--toggle-button-bg);
-        color: white;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        position: relative;
-    }
-
-    .fixed-settings-buttons button:hover {
-        background: var(--toggle-button-hover);
-        transform: translateY(-2px);
-        box-shadow: 0 9px 18px rgba(0,0,0,0.15);
-    }
-
-    body:not(.dark) .dark-toggle {
-        background: linear-gradient(45deg, #212529, #495057); /* <-- CHANGED: Blue to Dark Grey Gradient for Toggle */
-    }
-
-    body:not(.dark) .dark-toggle:hover {
-        background: linear-gradient(45deg, #495057, #212529); /* <-- CHANGED: Blue to Dark Grey Gradient for Toggle Hover */
-    }
-
-    .fixed-settings-buttons button svg {
-        width: 18px;
-        height: 18px;
-        fill: white;
-    }
-
-    /* Copy Icon */
-    .copy-icon {
-        cursor: pointer;
-        margin-left: 10px;
-        width: 18px;
-        height: 18px;
-        vertical-align: middle;
-        fill: var(--copy-icon-color);
-        transition: all 0.3s ease;
-        position: relative; /* Important for positioning the message */
-        z-index: 10;
-        display: inline-block;
-    }
-
-    /* بهبود هاور دکمه کپی */
-    .copy-icon:hover {
-        fill: #212529; /* CHANGED: Blue to Black/Dark Grey */
-        transform: scale(1.2);
-        filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5)); /* CHANGED: Blue Shadow to Black Shadow */
-    }
-    
-    /* New styles for copy message */
-    .copy-message {
-        position: absolute;
-        top: 50%; /* Center vertically */
-        right: 120%; /* Position to the left of the icon (in LTR context) */
-        transform: translateY(-50%);
-        background: #212529; /* CHANGED: Blue to Black */
-        color: white;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-size: 12px;
-        white-space: nowrap;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: 5; /* Below the icon */
-    }
-
-    .copy-message.show {
-        opacity: 1;
-    }
-    
-    .profit-row td {
-        color: #28a745;
-    }
-    
-    .loss-row td {
-        color: #dc3545;
-    }
-
-    .loss-label {
-        color: #dc3545;
-    }
-
-    .profit-label {
-        color: #28a745;
-    }
-
-    /* Responsive Adjustments (UNCHANGED, but ensures 2x2 on small screens too) */
-    @media (max-width: 768px) {
-        body { padding: 20px; font-size: 16px; }
-        .fixed-settings-buttons { top: 15px; right: 15px; gap: 10px; }
-        .fixed-settings-buttons button { width: 160px; padding: 10px 15px; font-size: 15px; border-radius: 14px; }
-        .container { padding: 30px 20px; border-radius: 18px; margin-top: 30px; }
-        label { font-size: 15px; margin: 18px 0 6px; }
-        input[type="number"], input[type="text"] { padding: 12px 15px; font-size: 15px; border-radius: 10px; }
-        .currency-row { gap: 10px; margin-bottom: 10px; } /* تنظیمات ریسپانسیو ردیف‌های جفت ارز */
-        .button-group { flex-direction: column; gap: 12px; margin-top: 25px; }
-        button { padding: 12px 20px; font-size: 16px; border-radius: 10px; }
-        .result { padding: 25px 20px; font-size: 17px; border-radius: 16px; margin-top: 30px; min-height: 220px; }
-        table { font-size: 15px; border-spacing: 0 8px; }
-        th, td { padding: 12px 18px; border-radius: 8px; }
-    }
-
-    @media (max-width: 480px) {
-        body { padding: 15px; font-size: 14px; }
-        .fixed-settings-buttons { position: static; margin: 0 auto 20px; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; width: 100%; padding: 0; box-shadow: none; background: none; }
-        .fixed-settings-buttons button { width: auto; flex: 1; min-width: 120px; padding: 10px 12px; font-size: 14px; border-radius: 12px; }
-        .fixed-settings-buttons button svg { display: none; }
-        .container { padding: 20px 15px; border-radius: 15px; margin-top: 20px; }
-        label { font-size: 14px; margin: 15px 0 5px; }
-        input[type="number"], input[type="text"], .custom-select { padding: 10px 12px; font-size: 14px; border-radius: 8px; }
-        .currency-row { gap: 8px; margin-bottom: 8px; } /* تنظیمات ریسپانسیو ردیف‌های جفت ارز */
-        .button-group { gap: 10px; }
-        button { padding: 10px 15px; font-size: 15px; border-radius: 8px; }
-        .result { padding: 15px 20px; font-size: 16px; border-radius: 14px; margin-top: 20px; min-height: 180px; }
-        table { font-size: 14px; border-spacing: 0 6px; }
-        th, td { padding: 10px 15px; border-radius: 8px; }
-    }
-</style>
-</head>
-<body>
-    <div class="fixed-settings-buttons">
-        <button class="dark-toggle" onclick="document.body.classList.toggle('dark')">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10c0-5.52-4.48-10-10-10zm0 18a8 8 0 118-8 8 8 0 01-8 8zm0-15a7 7 0 00-6.15 10.43c.12-.47.18-.96.18-1.47 0-4.14-3.36-7.5-7.5-7.5A9.91 9.91 0 0112 5z"/></svg>
-            Toggle Dark Mode
-        </button>
-    </div>
     <div class="container" id="mainCalculatorContainer">
         <section id="forexCalculator">
             <div class="input-group">
@@ -1232,4 +769,3 @@
     </script>
 </body>
 </html>
-
