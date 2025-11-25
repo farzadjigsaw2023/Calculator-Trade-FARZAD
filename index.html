@@ -48,13 +48,9 @@
 
     body {
         font-family: 'Poppins', sans-serif;
-        /* ---------- CHANGED: new background with subtle texture ---------- */
-        /* Keep var(--bg-color) for base (so dark mode still works), then add layered decorative gradients */
         background-color: var(--bg-color);
         background-image:
-            /* soft diagonal top-left light overlay */
             linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0) 60%),
-            /* repeating fine diagonal lines for texture */
             repeating-linear-gradient(135deg, rgba(255,255,255,0.18) 0 1px, transparent 1px 8px);
         background-blend-mode: overlay, normal;
         background-attachment: fixed;
@@ -134,31 +130,53 @@
         color: var(--label-color);
         cursor: pointer;
         transition: all 0.2s ease;
+        /* Mobile Fixes */
+        -webkit-tap-highlight-color: transparent;
+        user-select: none; /* FIX: Prevents text selection on long press */
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
     }
 
     .choice-btn:hover {
         background: var(--border-color);
     }
 
-    /* Active States - CHANGED: box-shadow to match border-radius */
+    /* Active States */
     .choice-btn.active {
         background: var(--theme-gradient);
         color: var(--active-btn-text);
         border: none;
-        box-shadow: 0 4px 15px var(--focus-glow), inset 0 0 0 1px rgba(255,255,255,0.2); /* Added inset for a slight lift effect */
+        /* Using multiple shadows to enforce rounded shape on mobile */
+        box-shadow: 
+            0 4px 12px -2px var(--focus-glow), 
+            0 0 0 2px var(--theme-primary),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.3);
         transform: translateY(-1px);
     }
     
-    /* Specific Active Colors Overrides (Gold/Blue) - CHANGED: box-shadow to match border-radius */
+    /* FIX: Prevents square shadow flash on mobile click/active state */
+    .choice-btn:active:not(.active) {
+        box-shadow: 0 0 0 2px var(--theme-primary); 
+        transform: translateY(0);
+    }
+
+    /* Specific Active Colors Overrides (Gold/Blue) */
     #btnXAUUSD.active {
         background: linear-gradient(135deg, #FFD700, #FDB931);
         color: #000000;
-        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4), inset 0 0 0 1px rgba(255,255,255,0.2);
+        box-shadow: 
+            0 4px 12px -2px rgba(255, 215, 0, 0.4),
+            0 0 0 2px #FFD700, 
+            inset 0 0 0 1px rgba(255, 255, 255, 0.3);
     }
     #btnUS30.active {
         background: linear-gradient(135deg, #003366, #0056b3); 
         color: #ffffff;
-        box-shadow: 0 4px 15px rgba(0, 51, 102, 0.4), inset 0 0 0 1px rgba(255,255,255,0.2);
+        box-shadow: 
+            0 4px 12px -2px rgba(0, 51, 102, 0.4),
+            0 0 0 2px #0056b3, 
+            inset 0 0 0 1px rgba(255, 255, 255, 0.3);
     }
 
     /* --- Action Buttons --- */
@@ -179,12 +197,19 @@
         cursor: pointer;
         transition: transform 0.2s, box-shadow 0.2s;
         box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
     .btn-buy { background: var(--btn-buy-bg); }
     .btn-sell { background: var(--btn-sell-bg); }
 
-    .action-btn:active { transform: scale(0.98); }
+    .action-btn:active { 
+        transform: scale(0.98); 
+        /* FIX: Ensure the active state maintains rounded shadow */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2), 0 0 0 2px rgba(255,255,255,0.1);
+    }
     .action-btn:hover {
         transform: translateY(-2px);
         box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -374,7 +399,6 @@
             
             if (!accountSize || accountSize <= 0) {
                 accountSize = 10000;
-                // Since the user removed the placeholder, we don't auto-fill unless they calculate
                 // document.getElementById('forexAccountSize').value = accountSize;
             }
             
