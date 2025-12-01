@@ -15,25 +15,25 @@
         --border-color: #dee2e6;
         --label-color: #606770;
         
-        /* Dynamic Theme Variables (Default: USDJPY/Red) */
-        --theme-primary: #D00000; /* Default Red for USDJPY */
-        --theme-gradient: linear-gradient(135deg, #A80000, #D00000);
-        --table-header-bg: linear-gradient(45deg, #A80000, #D00000);
+        /* Dynamic Theme Variables (Minimal Classic Blue) */
+        --theme-primary: #007BFF; /* Classic Blue Primary */
+        --theme-gradient: linear-gradient(135deg, #0066D8, #007BFF); /* Classic Blue Gradient */
+        --table-header-bg: linear-gradient(45deg, #0066D8, #007BFF);
         --table-header-text: #ffffff;
         --active-btn-text: #ffffff;
-        --focus-glow: rgba(208, 0, 0, 0.35); /* Focus for Red */
+        --focus-glow: rgba(0, 123, 255, 0.35); /* Blue Focus Glow */
         
-        --result-bg: #fff0f0;
-        --result-text: #D00000; 
+        --result-bg: #f0f7ff; /* Very light blue background */
+        --result-text: #0066D8; /* Darker Blue for Result Text */
         
-        --btn-buy-bg: linear-gradient(45deg, #28a745, #218838);
-        --btn-sell-bg: linear-gradient(45deg, #dc3545, #c82333);
+        --btn-buy-bg: linear-gradient(45deg, #28a745, #218838); /* Green (Buy) - Unchanged */
+        --btn-sell-bg: linear-gradient(45deg, #dc3545, #c82333); /* Red (Sell) - Unchanged */
 
-        /* --- Theme Variables for USDJPY --- */
-        --usdjpy-primary-light: #D00000;
-        --usdjpy-gradient-light: linear-gradient(135deg, #A80000, #D00000);
-        --usdjpy-primary-dark: #B71C1C;
-        --usdjpy-gradient-dark: linear-gradient(135deg, #9A1818, #B71C1C);
+        /* --- Theme Variables for USDJPY (Now using Minimal Classic Blue) --- */
+        --usdjpy-primary-light: #007BFF;
+        --usdjpy-gradient-light: linear-gradient(135deg, #0066D8, #007BFF);
+        --usdjpy-primary-dark: #0056B3;
+        --usdjpy-gradient-dark: linear-gradient(135deg, #004C99, #0056B3);
     }
 
     /* Dark Mode */
@@ -48,11 +48,11 @@
         --result-bg: #2a2b2c;
         --result-text: var(--usdjpy-primary-dark);
         
-        /* Dark Mode Red Theme Update */
+        /* Dark Mode Blue Theme Update */
         --theme-primary: var(--usdjpy-primary-dark);
         --theme-gradient: var(--usdjpy-gradient-dark);
         --table-header-bg: var(--usdjpy-gradient-dark);
-        --focus-glow: rgba(183, 28, 28, 0.35);
+        --focus-glow: rgba(0, 86, 179, 0.35); /* Darker Blue glow */
     }
 
     /* --- Reset & Layout --- */
@@ -128,8 +128,15 @@
     .row-group {
         display: flex;
         gap: 12px;
-        margin-bottom: 5px;
+        margin-bottom: 12px; /* Increased margin for two rows (2x2 layout) */
+        flex-wrap: wrap; 
     }
+    
+    /* Target only the last row-group (for risk buttons) to remove bottom margin */
+    .container > label:last-of-type + .row-group:last-of-type {
+        margin-bottom: 5px; 
+    }
+
 
     .choice-btn {
         flex: 1;
@@ -148,12 +155,15 @@
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
+        /* Set base width for 2 buttons per row (2x2 layout) */
+        min-width: calc(50% - 6px); 
     }
     
     /* Make single button fill the whole width */
     #btnUSDJPY { 
         flex: 1; 
         width: 100%;
+        min-width: unset; 
     }
 
 
@@ -161,7 +171,7 @@
         background: var(--border-color);
     }
 
-    /* Active States */
+    /* Active States - Now Minimal Classic Blue */
     .choice-btn.active {
         background: var(--theme-gradient);
         color: var(--active-btn-text);
@@ -178,22 +188,22 @@
         transform: translateY(0);
     }
 
-    /* USDJPY Theme (Light Mode - Red/Maroon for Japan) */
+    /* USDJPY Theme (Light Mode - Now Minimal Classic Blue) */
     #btnUSDJPY.active {
         background: var(--usdjpy-gradient-light); 
         color: #ffffff;
         box-shadow: 
-            0 4px 12px -2px rgba(168, 0, 0, 0.4),
+            0 4px 12px -2px rgba(0, 123, 255, 0.4), /* Blue Glow */
             0 0 0 2px var(--usdjpy-primary-light), 
             inset 0 0 0 1px rgba(255, 255, 255, 0.3);
     }
 
-    /* Dark Mode specific for USDJPY (Dark Red/Crimson) */
+    /* Dark Mode specific for USDJPY (Now Minimal Dark Blue) */
     body.dark #btnUSDJPY.active {
         background: var(--usdjpy-gradient-dark);
         color: #ffffff;
         box-shadow: 
-            0 4px 12px -2px rgba(183, 28, 28, 0.4),
+            0 4px 12px -2px rgba(0, 86, 179, 0.4), /* Dark Blue Glow */
             0 0 0 2px var(--usdjpy-primary-dark), 
             inset 0 0 0 1px rgba(255, 255, 255, 0.3);
     }
@@ -252,7 +262,7 @@
 
     table { width: 100%; border-collapse: collapse; }
     
-    /* Dynamic Header Style */
+    /* Dynamic Header Style - Now Blue */
     th {
         background: var(--table-header-bg); 
         color: var(--table-header-text); 
@@ -288,6 +298,7 @@
         cursor: pointer;
         fill: var(--label-color); 
         transition: fill 0.2s;
+        fill: var(--theme-primary); /* Changed copy icon color to theme primary */
         vertical-align: middle;
         margin-left: 8px;
         display: inline-block;
@@ -300,6 +311,10 @@
         .container {
             padding: 20px 15px;
             margin-top: 10px;
+        }
+        /* Ensure 2 buttons per row on all mobile sizes */
+        .choice-btn {
+            min-width: calc(50% - 6px);
         }
     }
 </style>
@@ -317,10 +332,17 @@
         <input type="number" id="forexAccountSize" inputmode="decimal">
 
         <label>Risk (%)</label>
+        
         <div class="row-group">
-            <button id="btnRisk1" class="choice-btn active" onclick="selectRisk(1)">1%</button>
+            <button id="btnRisk025" class="choice-btn" onclick="selectRisk(0.25)">0.25%</button>
             <button id="btnRisk05" class="choice-btn" onclick="selectRisk(0.5)">0.5%</button>
         </div>
+
+        <div class="row-group">
+            <button id="btnRisk075" class="choice-btn" onclick="selectRisk(0.75)">0.75%</button>
+            <button id="btnRisk1" class="choice-btn active" onclick="selectRisk(1)">1%</button>
+        </div>
+        
         <input type="hidden" id="forexRiskPercent" value="1">
 
         <label>Entry Price</label>
@@ -354,7 +376,7 @@
             const r = document.documentElement.style;
             const isDark = document.body.classList.contains('dark');
             
-            // USDJPY Theme (Red/Crimson)
+            // USDJPY Theme (Now Minimal Classic Blue)
             const jpyDarkPrimary = r.getPropertyValue('--usdjpy-primary-dark'); 
             const jpyDarkGradient = r.getPropertyValue('--usdjpy-gradient-dark');
             const jpyLightPrimary = r.getPropertyValue('--usdjpy-primary-light'); 
@@ -366,15 +388,32 @@
             r.setProperty('--table-header-text', '#ffffff');
             r.setProperty('--active-btn-text', '#ffffff');
             r.setProperty('--result-text', isDark ? jpyDarkPrimary : jpyLightPrimary); 
-            r.setProperty('--focus-glow', isDark ? 'rgba(183, 28, 28, 0.35)' : 'rgba(208, 0, 0, 0.35)');
         }
 
         // --- Selection Logic ---
         function selectRisk(val) {
+            // Deselect all risk buttons
             document.getElementById('btnRisk1').classList.remove('active');
             document.getElementById('btnRisk05').classList.remove('active');
-            document.getElementById(val === 1 ? 'btnRisk1' : 'btnRisk05').classList.add('active');
-            document.getElementById('forexRiskPercent').value = val;
+            document.getElementById('btnRisk025').classList.remove('active');
+            document.getElementById('btnRisk075').classList.remove('active');
+            
+            // Select the appropriate button based on the value
+            let btnId = '';
+            if (val === 1) {
+                btnId = 'btnRisk1';
+            } else if (val === 0.75) {
+                btnId = 'btnRisk075';
+            } else if (val === 0.5) {
+                btnId = 'btnRisk05';
+            } else if (val === 0.25) {
+                btnId = 'btnRisk025';
+            }
+
+            if (btnId) {
+                document.getElementById(btnId).classList.add('active');
+                document.getElementById('forexRiskPercent').value = val;
+            }
         }
 
         // --- Core Calculation ---
@@ -460,12 +499,12 @@
             document.getElementById('btnUSDJPY').classList.add('active'); // Ensure USDJPY is active
             document.getElementById('currencyPair').value = 'USDJPY';
             
-            selectRisk(1);
+            selectRisk(1); 
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                 document.body.classList.add('dark');
-                setTheme('USDJPY'); // Apply dark theme initially for USDJPY
+                setTheme('USDJPY'); 
             } else {
-                setTheme('USDJPY'); // Apply light theme initially for USDJPY
+                setTheme('USDJPY'); 
             }
             
             const suffix = '(Pips)'; 
