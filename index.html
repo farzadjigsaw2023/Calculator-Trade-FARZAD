@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -114,6 +115,7 @@
         }
 
         .input-box input { width: 100%; border: none; background: transparent; color: var(--text-main); font-size: 1.15rem; font-weight: 700; outline: none; }
+        .input-box input:read-only { color: var(--accent-primary); }
 
         .pill-group { display: flex; gap: 6px; }
 
@@ -145,13 +147,14 @@
         input:checked + .slider { background-color: var(--accent-primary); }
         input:checked + .slider:before { transform: translateX(16px); }
 
-        .atr-disabled { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
+        .atr-disabled { opacity: 0.5; filter: grayscale(0.8); }
+        .manual-sl-disabled { background: rgba(0,0,0,0.05); cursor: not-allowed; }
 
         .action-area { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }
         .btn { padding: 20px; border: none; border-radius: var(--radius-md); font-size: 1.1rem; font-weight: 800; color: white; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .btn:active { transform: scale(0.96); }
         .btn-sell { background: var(--sell-color); box-shadow: 0 6px 15px rgba(220, 38, 38, 0.2); }
-        .btn-buy { background: var(--buy-color); box-shadow: 0 6px 15px rgba(5, 150, 105, 0.2); }
+        .btn-buy { background: var(--buy-color); box-shadow: 0 6px 150px rgba(5, 150, 105, 0.2); }
 
         .result-card {
             margin-top: 24px; background: #0f172a; border-radius: var(--radius-md);
@@ -181,17 +184,14 @@
             font-weight: 700;
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         .main-lot div { 
-            font-size: 2.1rem; /* سایز به 2.1 تغییر کرد */
+            font-size: 2.1rem; 
             font-weight: 800; 
             color: #818cf8; 
             display: flex; 
             align-items: center; 
             justify-content: center;
-            width: 100%;
-            padding-left: 36px; /* برای حفظ وسط‌چین بودن دقیق عدد نسبت به لیبل */
             gap: 10px;
         }
         
@@ -213,10 +213,10 @@
             <div class="bento-grid">
                 <div class="input-box full-width" onclick="this.querySelector('input').focus()">
                     <label>Account Size ($)</label>
-                    <input type="number" id="accSize">
+                    <input type="number" id="accSize" placeholder="e.g. 10000">
                 </div>
 
-                <div class="pill-container full-width active-focus" id="riskGroup" onclick="toggleFocus(this)">
+                <div class="pill-container full-width active-focus" id="riskGroup">
                     <label>Risk (%)</label>
                     <div class="pill-group">
                         <button type="button" class="pill active" onclick="setRisk(0.5, this)">0.50%</button>
@@ -227,13 +227,13 @@
                 </div>
 
                 <div class="input-box full-width" onclick="this.querySelector('input').focus()">
-                    <label>Entry Price </label>
-                    <input type="number" id="entry" step="0.001">
+                    <label>Entry Price</label>
+                    <input type="number" id="entry" step="0.001" placeholder="150.000">
                 </div>
 
                 <div class="full-width">
                     <span class="section-label">
-                        ATR  OFF / ON
+                        ATR MODE (AUTO SL)
                         <label class="switch">
                             <input type="checkbox" id="atrToggle" checked onchange="toggleATR()">
                             <span class="slider"></span>
@@ -243,10 +243,10 @@
 
                 <div class="bento-grid full-width" id="atrBox">
                     <div class="input-box" onclick="this.querySelector('input').focus()">
-                        <label> ATR  Price</label>
-                        <input type="number" id="atrInput" step="0.001">
+                        <label>ATR Value</label>
+                        <input type="number" id="atrInput" step="0.001" placeholder="0.450">
                     </div>
-                    <div class="pill-container active-focus" id="multGroup" onclick="toggleFocus(this)">
+                    <div class="pill-container active-focus">
                         <label>Multiplier</label>
                         <div class="pill-group">
                             <button type="button" class="pill" onclick="setMult(2.0, this)">2.0x</button>
@@ -256,20 +256,20 @@
                 </div>
 
                 <div class="input-box" onclick="this.querySelector('input').focus()">
-                    <label>TP</label>
-                    <input type="number" id="tpPips">
+                    <label>TP (Pips)</label>
+                    <input type="number" id="tpPips" placeholder="50">
                 </div>
-                <div class="input-box" id="slManualBox" onclick="this.querySelector('input').focus()">
-                    <label>SL</label>
-                    <input type="number" id="slPips">
+                <div class="input-box" id="slManualBox">
+                    <label id="slLabel">SL (Pips)</label>
+                    <input type="number" id="slPips" placeholder="20">
                 </div>
                 
                 <input type="hidden" id="multVal" value="2.5">
             </div>
 
             <div class="action-area">
-                <button type="button" class="btn btn-sell" onclick="runCalc('short')">Sell </button>
-                <button type="button" class="btn btn-buy" onclick="runCalc('long')">Buy </button>
+                <button type="button" class="btn btn-sell" onclick="runCalc('short')">Sell</button>
+                <button type="button" class="btn btn-buy" onclick="runCalc('long')">Buy</button>
             </div>
         </form>
 
@@ -277,32 +277,42 @@
     </div>
 
     <script>
+        // در ابتدای لود، وضعیت فیلد SL را تنظیم کن
         window.onload = () => {
-            document.getElementById('calcForm').reset();
-            document.getElementById('resBox').style.display = 'none';
+            toggleATR();
         };
 
-        function toggleFocus(el) {
-            el.classList.add('active-focus');
-        }
-
         function setRisk(v, b) {
-            event.stopPropagation();
             b.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
             b.classList.add('active');
             document.getElementById('riskVal').value = v;
         }
 
         function setMult(v, b) {
-            event.stopPropagation();
             b.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
             b.classList.add('active');
             document.getElementById('multVal').value = v;
         }
 
         function toggleATR() {
-            const active = document.getElementById('atrToggle').checked;
-            document.getElementById('atrBox').classList.toggle('atr-disabled', !active);
+            const isAtrActive = document.getElementById('atrToggle').checked;
+            const atrBox = document.getElementById('atrBox');
+            const slInput = document.getElementById('slPips');
+            const slBox = document.getElementById('slManualBox');
+            const slLabel = document.getElementById('slLabel');
+
+            if (isAtrActive) {
+                atrBox.classList.remove('atr-disabled');
+                slInput.readOnly = true;
+                slBox.classList.add('manual-sl-disabled');
+                slLabel.innerText = "SL (ATR CALC)";
+            } else {
+                atrBox.classList.add('atr-disabled');
+                slInput.readOnly = false;
+                slBox.classList.remove('manual-sl-disabled');
+                slLabel.innerText = "SL (MANUAL)";
+                slInput.value = ""; // پاک کردن برای ورود دستی
+            }
         }
 
         async function copy(t, b) {
@@ -313,31 +323,42 @@
         }
 
         function runCalc(type) {
-            const getVal = (id, min, max) => {
-                const el = document.getElementById(id);
-                if (el.value === "" || isNaN(parseFloat(el.value))) {
-                    return (Math.random() * (max - min) + min);
-                }
-                return parseFloat(el.value);
+            const getVal = (id) => {
+                const val = document.getElementById(id).value;
+                return val === "" ? 0 : parseFloat(val);
             };
 
-            const acc = getVal('accSize', 5000, 20000);
+            const acc = getVal('accSize');
             const riskP = parseFloat(document.getElementById('riskVal').value);
-            const entP = getVal('entry', 150.000, 155.000);
+            const entP = getVal('entry');
             const useATR = document.getElementById('atrToggle').checked;
             
-            let stopPips;
-            if(useATR) {
-                const av = getVal('atrInput', 0.300, 0.500);
-                const m = parseFloat(document.getElementById('multVal').value);
-                stopPips = (av * m) / 0.01;
-            } else {
-                stopPips = getVal('slPips', 15, 30);
+            if (acc <= 0 || entP <= 0) {
+                alert("Please enter Account Size and Entry Price");
+                return;
             }
 
-            const takePips = getVal('tpPips', stopPips * 1.5, stopPips * 3);
+            let stopPips;
+            if(useATR) {
+                const av = getVal('atrInput');
+                const m = parseFloat(document.getElementById('multVal').value);
+                if (av <= 0) { alert("Enter ATR Value"); return; }
+                // محاسبه پیپ برای USDJPY (هر 0.01 معادل 1 پیپ است)
+                stopPips = (av * m) / 0.01;
+                // نمایش پیپ محاسبه شده در فیلد SL
+                document.getElementById('slPips').value = stopPips.toFixed(1);
+            } else {
+                stopPips = getVal('slPips');
+                if (stopPips <= 0) { alert("Enter SL Pips"); return; }
+            }
+
+            const takePips = getVal('tpPips') || (stopPips * 2); // اگر TP وارد نشود پیش‌فرض 1:2
+            if (!document.getElementById('tpPips').value) {
+                document.getElementById('tpPips').value = takePips.toFixed(1);
+            }
             
             const riskUSD = acc * (riskP / 100);
+            // ارزش هر پیپ در لات استاندارد برای USDJPY
             const pipVal = (100000 * 0.01) / entP;
             const lots = riskUSD / (stopPips * pipVal);
             
@@ -353,20 +374,20 @@
             out.innerHTML = `
                 <div class="res-grid">
                     <div class="main-lot">
-                        <label>Position Size</label>
+                        <label>Position Size (Lots)</label>
                         <div>${lots.toFixed(2)} <button class="copy-btn" onclick="copy('${lots.toFixed(2)}', this)\">${ico}</button></div>
                     </div>
                     <div class="res-item">
-                        <label>TP</label>
+                        <label>Take Profit Price</label>
                         <div>${tpPrice.toFixed(3)} <button class="copy-btn" onclick="copy('${tpPrice.toFixed(3)}', this)\">${ico}</button></div>
                     </div>
                     <div class="res-item">
-                        <label>SL</label>
+                        <label>Stop Loss Price</label>
                         <div>${slPrice.toFixed(3)} <button class="copy-btn" onclick="copy('${slPrice.toFixed(3)}', this)\">${ico}</button></div>
                     </div>
-                    <div class="res-item"><label>Profit</label><div style="color:#10b981">+$${profit.toFixed(2)}</div></div>
-                    <div class="res-item"><label>Loss</label><div style="color:#f43f5e">-$${riskUSD.toFixed(2)}</div></div>
-                    <div class="rr-badge">Risk : Reward  &nbsp; <b>1 : ${rr}</b></div>
+                    <div class="res-item"><label>Expected Profit</label><div style="color:#10b981">+$${profit.toFixed(2)}</div></div>
+                    <div class="res-item"><label>Max Risk</label><div style="color:#f43f5e">-$${riskUSD.toFixed(2)}</div></div>
+                    <div class="rr-badge">Risk : Reward Ratio &nbsp; <b>1 : ${rr}</b></div>
                 </div>
             `;
             out.scrollIntoView({ behavior: 'smooth', block: 'end' });
