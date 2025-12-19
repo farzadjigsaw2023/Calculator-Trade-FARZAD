@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -22,6 +21,11 @@
             --radius-md: 16px;
             --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1);
             --shadow-glow: 0 10px 15px -3px rgba(79, 70, 229, 0.15);
+            /* Result Card Sync */
+            --res-bg: #ffffff;
+            --res-text: #0f172a;
+            --res-label: #64748b;
+            --res-border: #e2e8f0;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -32,6 +36,11 @@
                 --text-dim: #94a3b8;
                 --input-bg: rgba(30, 41, 59, 0.6);
                 --border: rgba(51, 65, 85, 0.5);
+                /* Result Card Sync Dark */
+                --res-bg: #0f172a;
+                --res-text: #f8fafc;
+                --res-label: #94a3b8;
+                --res-border: rgba(255,255,255,0.08);
             }
         }
 
@@ -155,8 +164,13 @@
         .btn-buy { background: var(--buy-color); box-shadow: 0 6px 15px rgba(5, 150, 105, 0.2); }
 
         .result-card {
-            margin-top: 24px; background: #0f172a; border-radius: var(--radius-md);
-            padding: 22px; color: #f8fafc; display: none; border: 1px solid rgba(255,255,255,0.08);
+            margin-top: 24px; 
+            background: var(--res-bg); 
+            border-radius: var(--radius-md);
+            padding: 22px; 
+            color: var(--res-text); 
+            display: none; 
+            border: 1px solid var(--res-border);
             animation: slideUp 0.4s ease-out;
         }
 
@@ -166,7 +180,7 @@
         
         .main-lot { 
             grid-column: span 2; 
-            background: rgba(99, 102, 241, 0.15); 
+            background: rgba(99, 102, 241, 0.1); 
             padding: 20px 10px; 
             border-radius: 16px; 
             display: flex;
@@ -174,20 +188,19 @@
             align-items: center; 
             justify-content: center;
             text-align: center;
-            border: 1px solid rgba(99, 102, 241, 0.3); 
+            border: 1px solid rgba(99, 102, 241, 0.2); 
         }
         .main-lot label {
             font-size: 0.85rem; 
-            color: #94a3b8;
+            color: var(--res-label);
             font-weight: 700;
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         .main-lot div { 
             font-size: 2.1rem; 
             font-weight: 800; 
-            color: #818cf8; 
+            color: var(--accent-primary); 
             display: flex; 
             align-items: center; 
             justify-content: center;
@@ -196,12 +209,12 @@
             gap: 10px;
         }
         
-        .res-item label { font-size: 0.8rem; color: #94a3b8; font-weight: 700; margin-bottom: 4px; display: block; text-transform: uppercase;}
+        .res-item label { font-size: 0.8rem; color: var(--res-label); font-weight: 700; margin-bottom: 4px; display: block; text-transform: uppercase;}
         .res-item div { font-size: 1.05rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-        .rr-badge { grid-column: span 2; text-align: center; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 12px; font-size: 1rem; border: 1px dashed #334155; color: #e2e8f0; }
+        .rr-badge { grid-column: span 2; text-align: center; padding: 10px; background: rgba(0,0,0,0.03); border-radius: 12px; font-size: 1rem; border: 1px dashed var(--res-label); color: var(--res-text); }
 
-        .copy-btn { background: rgba(255,255,255,0.1); border: none; border-radius: 8px; padding: 6px; cursor: pointer; color: white; transition: 0.2s; }
-        .copy-btn:hover { background: rgba(255,255,255,0.2); }
+        .copy-btn { background: rgba(0,0,0,0.05); border: none; border-radius: 8px; padding: 6px; cursor: pointer; color: var(--res-text); transition: 0.2s; }
+        .copy-btn:hover { background: rgba(0,0,0,0.1); }
         .copy-btn svg { width: 14px; height: 14px; fill: currentColor; }
     </style>
 </head>
@@ -318,7 +331,9 @@
             const getVal = (id, min, max) => {
                 const el = document.getElementById(id);
                 if (!el || el.value === "" || isNaN(parseFloat(el.value))) {
-                    return (Math.random() * (max - min) + min);
+                    const rand = (Math.random() * (max - min) + min);
+                    // برای Entry و ATR رند کردن به ۳ رقم اعشار، برای بقیه عدد صحیح
+                    return (id === 'entry' || id === 'atrInput') ? parseFloat(rand.toFixed(3)) : Math.round(rand);
                 }
                 return parseFloat(el.value);
             };
@@ -332,10 +347,13 @@
             if(useATR) {
                 const av = getVal('atrInput', 0.300, 0.500);
                 const m = parseFloat(document.getElementById('multVal').value);
-                stopPips = (av * m) / 0.01;
+                stopPips = Math.round((av * m) / 0.01);
             } else {
                 stopPips = getVal('slPips', 15, 30);
             }
+
+            // نمایش مقدار استاپ در فیلد ورودی جهت اطلاع کاربر
+            document.getElementById('slPips').value = stopPips;
 
             const takePips = getVal('tpPips', stopPips * 1.5, stopPips * 3);
             
