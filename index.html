@@ -45,16 +45,21 @@
             background-color: var(--bg);
             color: var(--text);
             display: flex;
-            justify-content: center;
+            align-items: center; /* مرکز عمودی */
+            justify-content: center; /* مرکز افقی */
             min-height: 100vh;
-            padding: env(safe-area-inset-top) 15px calc(env(safe-area-inset-bottom) + 40px);
+            padding: 20px; /* فاصله از لبه‌های گوشی */
         }
 
         input::-webkit-outer-spin-button, 
         input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
 
-        .wrapper { width: 100%; max-width: 400px; padding-top: 20px; }
+        .wrapper { 
+            width: 100%; 
+            max-width: 400px; 
+            margin: auto; /* اطمینان از مرکزیت */
+        }
 
         .group { background: var(--sheet); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border); }
         .cell {
@@ -74,18 +79,18 @@
             color: var(--brand-alt); 
             font-weight: 700; 
             font-size: 1.1rem;
-            width: 55%; 
+            width: 50%; 
             font-family: 'JetBrains Mono', monospace;
         }
 
         .selector { display: flex; gap: 4px; background: var(--border); padding: 3px; border-radius: 12px; }
         .selector-btn {
-            border: none; background: transparent; padding: 6px 12px; border-radius: 10px;
-            font-size: 0.7rem; font-weight: 800; color: var(--text-sec); cursor: pointer; transition: 0.2s;
+            border: none; background: transparent; padding: 6px 10px; border-radius: 10px;
+            font-size: 0.65rem; font-weight: 800; color: var(--text-sec); cursor: pointer; transition: 0.2s;
         }
         .selector-btn.active { background: var(--bg); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 
-        .execution { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 30px 0; }
+        .execution { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 25px 0; }
         .ex-btn {
             padding: 18px; border-radius: 18px; border: none; font-size: 1.1rem; font-weight: 900;
             color: var(--btn-text);
