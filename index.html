@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Sovereign Calc 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <title>Sovereign Calc 2026 | Precision Risk Manager</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand: #000000;
@@ -23,254 +23,197 @@
         @media (prefers-color-scheme: dark) {
             :root {
                 --brand: #ffffff;
-                --bg: #000000;
+                --bg:    #210172 ;
                 --sheet: #1c1c1e;
                 --border: #38383a;
                 --text: #ffffff;
                 --text-sec: #8e8e93;
-                --brand-alt: #1e40af;
+                --brand-alt: #3b82f6;
                 --btn-text: #000000;
             }
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Inter', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex;
-            align-items: center; 
-            justify-content: center; 
-            min-height: 100vh;
-            padding: 20px; 
-        }
-
-        input::-webkit-outer-spin-button, 
-        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
-
-        .wrapper { 
-            width: 100%; 
-            max-width: 400px; 
-            margin: auto; 
-        }
-
+        .wrapper { width: 100%; max-width: 400px; margin: auto; }
         .group { background: var(--sheet); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border); }
-        .cell {
-            padding: 14px 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border);
-        }
+        .cell { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
         .cell:last-child { border-bottom: none; }
         .cell label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-        .cell input {
-            background: transparent;
-            border: none; 
-            outline: none; 
-            text-align: right;
-            color: var(--brand-alt); 
-            font-weight: 700; 
-            font-size: 1.1rem;
-            width: 50%; 
-            font-family: 'JetBrains Mono', monospace;
-        }
-
+        .cell input { background: transparent; border: none; outline: none; text-align: right; color: var(--brand-alt); font-weight: 700; font-size: 1.1rem; width: 50%; font-family: 'JetBrains Mono', monospace; }
         .selector { display: flex; gap: 4px; background: var(--border); padding: 3px; border-radius: 12px; }
-        .selector-btn {
-            border: none; background: transparent; padding: 6px 8px; border-radius: 10px;
-            font-size: 0.65rem; font-weight: 800; color: var(--text-sec); cursor: pointer; transition: 0.2s;
-        }
+        .selector-btn { border: none; background: transparent; padding: 6px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; color: var(--text-sec); cursor: pointer; transition: 0.2s; }
         .selector-btn.active { background: var(--bg); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-
         .execution { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 25px 0; }
-        .ex-btn {
-            padding: 18px; border-radius: 18px; border: none; font-size: 1.1rem; font-weight: 900;
-            color: var(--btn-text);
-            cursor: pointer; transition: 0.2s; text-transform: uppercase;
-        }
+        .ex-btn { padding: 18px; border-radius: 18px; border: none; font-size: 1.1rem; font-weight: 900; color: var(--btn-text); cursor: pointer; transition: 0.2s; text-transform: uppercase; }
         .ex-btn:active { transform: scale(0.95); opacity: 0.9; }
         .buy { background: var(--success); }
         .sell { background: var(--danger); }
-
-        .receipt { display: none; animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        .receipt { display: none; animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1); margin-top: 12px; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .result-card {
-            background: var(--sheet);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            padding: 16px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-        }
-
-        .lot-btn {
-            width: 100%;
-            background: var(--brand-alt);
-            border: none;
-            border-radius: 16px;
-            padding: 14px;
-            color: white;
-            margin-bottom: 12px;
-            cursor: pointer;
-        }
-        
+        .result-card { background: var(--sheet); border-radius: 24px; border: 1px solid var(--border); padding: 16px; box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        .lot-btn { width: 100%; background: var(--brand-alt); border: none; border-radius: 16px; padding: 14px; color: white; margin-bottom: 12px; cursor: pointer; }
         .lot-info span { display: block; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 2px; }
         .lot-info strong { font-size: 2rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; }
-
         .target-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .target-btn {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 14px;
-            text-align: center;
-        }
+        .target-btn { background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; }
         .target-label { font-size: 0.6rem; font-weight: 800; color: var(--text-sec); text-transform: uppercase; display: block; }
         .target-val { font-size: 1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 12px; border-top: 1px dashed var(--border); }
         .stat-card { background: var(--bg); padding: 10px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
         .stat-label { font-size: 0.55rem; font-weight: 800; color: var(--text-sec); text-transform: uppercase; }
         .stat-val { font-size: 0.9rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; display: block; }
-
     </style>
 </head>
 <body>
-
-    <div class="wrapper">
-        <form id="calc">
-            <div class="group">
-                <div class="cell">
-                    <label>Trading Pair</label>
-                    <div class="selector">
-                        <button type="button" class="selector-btn active" onclick="setParam('pair', 'USDJPY', this)">USDJPY</button>
-                        <button type="button" class="selector-btn" onclick="setParam('pair', 'GBPJPY', this)">GBPJPY</button>
-                    </div>
+<div class="wrapper">
+    <form id="calc">
+        <div class="group">
+            <div class="cell">
+                <label>Trading Pair</label>
+                <div class="selector">
+                    <button type="button" class="selector-btn" onclick="setPair('USDJPY', this)">USDJPY</button>
+                    <button type="button" class="selector-btn" onclick="setPair('EURUSD', this)">EURUSD</button>
+                    <button type="button" class="selector-btn" onclick="setPair('XAUUSD', this)">XAUUSD</button>
                 </div>
-                <div class="cell"><label>Balance ($)</label><input type="number" id="accSize" value="" placeholder="0" inputmode="decimal"></div>
             </div>
-
-            <div class="group">
-                <div class="cell">
-                    <label>Risk %</label>
-                    <div class="selector">
-                        <button type="button" class="selector-btn" onclick="setParam('risk', 0.5, this)">0.5%</button>
-                        <button type="button" class="selector-btn active" onclick="setParam('risk', 1, this)">1%</button>
-                        <button type="button" class="selector-btn" onclick="setParam('risk', 1.5, this)">1.5%</button>
-                    </div>
+            <div class="cell"><label>Balance ($)</label><input type="number" id="accSize" value="" placeholder="0" inputmode="decimal"></div>
+        </div>
+        <div class="group">
+            <div class="cell">
+                <label>Risk %</label>
+                <div class="selector">
+                    <button type="button" class="selector-btn" onclick="setRisk(0.5, this)">0.5%</button>
+                    <button type="button" class="selector-btn" onclick="setRisk(1, this)">1%</button>
                 </div>
-                <div class="cell"><label>Entry Price</label><input type="number" id="entry" step="0.001" placeholder="0.000" inputmode="decimal"></div>
             </div>
-
-            <div class="group">
-                <div class="cell"><label>SL Pips </label><input type="number" id="slPipsManual" placeholder="0" inputmode="decimal"></div>
-                <div class="cell"><label>TP Pips </label><input type="number" id="tpPips" placeholder="0" inputmode="decimal"></div>
-            </div>
-
-            <input type="hidden" id="pairVal" value="USDJPY">
-            <input type="hidden" id="riskVal" value="1">
-
-            <div class="execution">
-                <button type="button" class="ex-btn sell" onclick="run('short')">Sell</button>
-                <button type="button" class="ex-btn buy" onclick="run('long')">Buy</button>
-            </div>
-        </form>
-
-        <div id="receipt" class="receipt">
-            <div class="result-card">
-                <button class="lot-btn" onclick="copyValue('rLot')">
-                    <div class="lot-info">
-                        <span> Position Size (Lots)</span>
-                        <strong id="rLot">0.00</strong>
-                    </div>
-                </button>
-
-                <div class="target-group">
-                    <div class="target-btn" onclick="copyValue('rTP')">
-                        <span class="target-label">TP </span>
-                        <span class="target-val" id="rTP">0.000</span>
-                    </div>
-                    <div class="target-btn" onclick="copyValue('rSL')">
-                        <span class="target-label"> SL</span>
-                        <span class="target-val" id="rSL">0.000</span>
-                    </div>
+            <div class="cell"><label>Entry Price</label><input type="number" id="entry" step="any" placeholder="0.00" inputmode="decimal"></div>
+        </div>
+        <div class="group">
+            <div class="cell"><label id="slLabel">SL</label><input type="number" id="slInput" placeholder="0" step="any" inputmode="decimal"></div>
+            <div class="cell"><label id="tpLabel">TP</label><input type="number" id="tpInput" placeholder="0" step="any" inputmode="decimal"></div>
+        </div>
+        <div class="execution">
+            <button type="button" class="ex-btn sell" onclick="run('short')">SELL</button>
+            <button type="button" class="ex-btn buy" onclick="run('long')">BUY</button>
+        </div>
+    </form>
+    <div id="receipt" class="receipt">
+        <div class="result-card">
+            <button class="lot-btn" onclick="copyValue('rLot')">
+                <div class="lot-info">
+                    <span>POSITION SIZE (LOTS)</span>
+                    <strong id="rLot">0.00</strong>
                 </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-label">Risk (Loss)</span>
-                        <span class="stat-val" id="rRisk" style="color:var(--danger)">$0.00</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-label">Reward (Win)</span>
-                        <span class="stat-val" id="rReward" style="color:var(--success)">$0.00</span>
-                    </div>
+            </button>
+            <div class="target-group">
+                <div class="target-btn" onclick="copyValue('rTP')">
+                    <span class="target-label">TP PRICE</span>
+                    <span class="target-val" id="rTP">0.00000</span>
                 </div>
+                <div class="target-btn" onclick="copyValue('rSL')">
+                    <span class="target-label">SL PRICE</span>
+                    <span class="target-val" id="rSL">0.00000</span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><span class="stat-label">RISK (LOSS)</span><span class="stat-val" id="rRisk" style="color:var(--danger)">$0.00</span></div>
+                <div class="stat-card"><span class="stat-label">REWARD (WIN)</span><span class="stat-val" id="rReward" style="color:var(--success)">$0.00</span></div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        function setParam(id, val, btn) {
-            document.getElementById(id + 'Val').value = val;
-            const buttons = btn.parentElement.querySelectorAll('.selector-btn');
-            buttons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+<script>
+    let currentPair = 'XAUUSD';
+    let currentRiskPercent = 1.0;
+
+    function setPair(p, btn) {
+        currentPair = p;
+        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const slLabel = document.getElementById('slLabel');
+        const tpLabel = document.getElementById('tpLabel');
+        
+        // تنظیم لیبل‌ها برای درک بهتر کاربر
+        if (p === 'XAUUSD') {
+            slLabel.innerText = 'SL ($ Change)';
+            tpLabel.innerText = 'TP ($ Change)';
+        } else {
+            slLabel.innerText = 'SL (Pips)';
+            tpLabel.innerText = 'TP (Pips)';
+        }
+    }
+
+    function calculateTrade(accountBalance, riskPercent, entry, slVal, tpVal, pair, side) {
+        const targetRiskUSD = accountBalance * (riskPercent / 100.0);
+        let slPrice, tpPrice, lots;
+
+        if (pair === 'XAUUSD') {
+            // اصلاح قیمت: اگر عدد 5 وارد شود یعنی 5 دلار فاصله از نقطه ورود[cite: 1]
+            slPrice = (side === 'long') ? (entry - slVal) : (entry + slVal);
+            tpPrice = (side === 'long') ? (entry + tpVal) : (entry - tpVal);
+            // در طلا هر 1 دلار حرکت قیمت در 1 لات برابر 100 دلار سود/ضرر است[cite: 1]
+            lots = targetRiskUSD / (slVal * 100);
+        } else {
+            const pipScale = (pair === 'USDJPY') ? 0.01 : 0.0001;
+            slPrice = (side === 'long') ? (entry - (slVal * pipScale)) : (entry + (slVal * pipScale));
+            tpPrice = (side === 'long') ? (entry + (tpVal * pipScale)) : (entry - (tpVal * pipScale));
+            const pipValuePerLot = (pair === 'USDJPY') ? (1000 / entry) : 10.0;
+            lots = targetRiskUSD / (slVal * pipValuePerLot);
         }
 
-        async function copyValue(id) {
-            const val = document.getElementById(id).innerText;
-            try { 
-                await navigator.clipboard.writeText(val);
-                const el = document.getElementById(id);
-                el.style.opacity = '0.5';
-                setTimeout(() => el.style.opacity = '1', 150);
-            } catch (err) {}
+        lots = Math.round(lots * 100) / 100;
+        if (lots < 0.01) lots = 0.01;
+
+        let finalRisk, finalReward;
+        if (pair === 'XAUUSD') {
+            finalRisk = Math.abs(entry - slPrice) * lots * 100;
+            finalReward = Math.abs(entry - tpPrice) * lots * 100;
+        } else {
+            const currentPipValue = (pair === 'USDJPY') ? (1000 / entry) : 10.0;
+            finalRisk = slVal * lots * currentPipValue;
+            finalReward = tpVal * lots * currentPipValue;
         }
 
-        function run(side) {
-            const acc = parseFloat(document.getElementById('accSize').value) || 0;
-            const riskP = parseFloat(document.getElementById('riskVal').value);
-            const entry = parseFloat(document.getElementById('entry').value) || 0;
-            const slPips = parseFloat(document.getElementById('slPipsManual').value) || 0;
-            const manTP = parseFloat(document.getElementById('tpPips').value) || 0;
+        return { lots, slPrice, tpPrice, riskUSD: finalRisk, rewardUSD: finalReward };
+    }
 
-            if (!acc || !entry || !slPips) {
-                alert("لطفا مقادیر موجودی، نقطه ورود و حد ضرر را وارد کنید.");
-                return;
-            }
+    function run(side) {
+        const acc = parseFloat(document.getElementById('accSize').value);
+        const ent = parseFloat(document.getElementById('entry').value);
+        const sl = parseFloat(document.getElementById('slInput').value);
+        const tp = parseFloat(document.getElementById('tpInput').value) || 0;
 
-            const tpPips = manTP > 0 ? manTP : (slPips * 2);
-            const riskUSD = acc * (riskP / 100);
+        if (!acc || !ent || isNaN(sl) || sl <= 0) return;
 
-            // Calculation for JPY pairs
-            const pipValuePerLot = (0.01 / entry) * 100000;
-            const lots = riskUSD / (slPips * pipValuePerLot);
+        const res = calculateTrade(acc, currentRiskPercent, ent, sl, tp, currentPair, side);
+        
+        document.getElementById('rLot').innerText = res.lots.toFixed(2);
+        const priceFormat = (currentPair === 'XAUUSD') ? 2 : (currentPair === 'USDJPY' ? 3 : 5);
+        document.getElementById('rTP').innerText = res.tpPrice.toFixed(priceFormat);
+        document.getElementById('rSL').innerText = res.slPrice.toFixed(priceFormat);
+        document.getElementById('rRisk').innerText = `-$${res.riskUSD.toFixed(2)}`;
+        document.getElementById('rReward').innerText = `+$${res.rewardUSD.toFixed(2)}`;
+        document.getElementById('receipt').style.display = 'block';
+    }
 
-            const slPrice = side === 'long' ? entry - (slPips * 0.01) : entry + (slPips * 0.01);
-            const tpPrice = side === 'long' ? entry + (tpPips * 0.01) : entry - (tpPips * 0.01);
+    function setRisk(r, btn) {
+        currentRiskPercent = r;
+        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
 
-            document.getElementById('rLot').innerText = lots.toFixed(2);
-            document.getElementById('rTP').innerText = tpPrice.toFixed(3);
-            document.getElementById('rSL').innerText = slPrice.toFixed(3);
-            document.getElementById('rRisk').innerText = '-$' + riskUSD.toFixed(2);
-            
-            const rewardUSD = (riskUSD * (tpPips / slPips));
-            document.getElementById('rReward').innerText = '+$' + rewardUSD.toFixed(2);
+    async function copyValue(id) {
+        try { await navigator.clipboard.writeText(document.getElementById(id).innerText); } catch(e) {}
+    }
 
-            document.getElementById('receipt').style.display = 'block';
-            setTimeout(() => {
-                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-            }, 100);
-        }
-    </script>
+    document.addEventListener('DOMContentLoaded', () => {
+        setPair('XAUUSD', document.querySelector('.selector button:nth-child(3)'));
+        setRisk(1, document.querySelectorAll('.selector')[1].querySelector('button:nth-child(2)'));
+    });
+</script>
 </body>
 </html>
