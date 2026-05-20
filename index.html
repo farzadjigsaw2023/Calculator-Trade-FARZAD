@@ -3,182 +3,529 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Sovereign Calc 2026 | Precision Risk Manager</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <title>Quantum Risk Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --brand: #000000;
-            --brand-alt: #2563eb;
-            --bg: #ffffff;
-            --sheet: #f2f2f7;
-            --border: #e5e5ea;
-            --text: #000000;
-            --text-sec: #8e8e93;
-            --success: #34c759;
-            --danger: #ff3b30;
-            --radius: 20px;
-            --btn-text: #ffffff;
+            --bg: #060814;
+            --panel-bg: rgba(11, 15, 36, 0.7);
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.35);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dark: #64748b;
+            
+            --buy-color: #10b981;
+            --buy-bg: rgba(16, 185, 129, 0.06);
+            --buy-border: rgba(16, 185, 129, 0.3);
+            --buy-glow: rgba(16, 185, 129, 0.25);
+            
+            --sell-color: #f43f5e;
+            --sell-bg: rgba(244, 63, 94, 0.06);
+            --sell-border: rgba(244, 63, 94, 0.3);
+            --sell-glow: rgba(244, 63, 94, 0.25);
+            
+            --card-surface: rgba(15, 23, 42, 0.45);
+            --radius-main: 32px;
+            --radius-inner: 20px;
         }
 
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --brand: #ffffff;
-                --bg:    #210172 ;
-                --sheet: #1c1c1e;
-                --border: #38383a;
-                --text: #ffffff;
-                --text-sec: #8e8e93;
-                --brand-alt: #3b82f6;
-                --btn-text: #000000;
-            }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        body { 
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 50% -20%, rgba(99, 102, 241, 0.25) 0%, transparent 55%),
+                radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.07) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(244, 63, 94, 0.07) 0%, transparent 45%);
+            color: var(--text-main); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            padding: calc(24px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)) 16px;
+            overflow-x: hidden;
+        }
+
+        input::-webkit-outer-spin-button, 
+        input::-webkit-inner-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
         input[type=number] { -moz-appearance: textfield; }
-        .wrapper { width: 100%; max-width: 400px; margin: auto; }
-        .group { background: var(--sheet); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border); }
-        .cell { padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .cell:last-child { border-bottom: none; }
-        .cell label { font-size: 0.85rem; font-weight: 600; color: var(--text); }
-        .cell input { background: transparent; border: none; outline: none; text-align: right; color: var(--brand-alt); font-weight: 700; font-size: 1.1rem; width: 50%; font-family: 'JetBrains Mono', monospace; }
-        .selector { display: flex; gap: 4px; background: var(--border); padding: 3px; border-radius: 12px; }
-        .selector-btn { border: none; background: transparent; padding: 6px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; color: var(--text-sec); cursor: pointer; transition: 0.2s; }
-        .selector-btn.active { background: var(--bg); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .execution { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 25px 0; }
-        .ex-btn { padding: 18px; border-radius: 18px; border: none; font-size: 1.1rem; font-weight: 900; color: var(--btn-text); cursor: pointer; transition: 0.2s; text-transform: uppercase; }
-        .ex-btn:active { transform: scale(0.95); opacity: 0.9; }
-        .buy { background: var(--success); }
-        .sell { background: var(--danger); }
-        .receipt { display: none; animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1); margin-top: 12px; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .result-card { background: var(--sheet); border-radius: 24px; border: 1px solid var(--border); padding: 16px; box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
-        .lot-btn { width: 100%; background: var(--brand-alt); border: none; border-radius: 16px; padding: 14px; color: white; margin-bottom: 12px; cursor: pointer; }
-        .lot-info span { display: block; font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; opacity: 0.8; margin-bottom: 2px; }
-        .lot-info strong { font-size: 2rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; }
-        .target-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .target-btn { background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 14px; text-align: center; cursor: pointer; }
-        .target-label { font-size: 0.6rem; font-weight: 800; color: var(--text-sec); text-transform: uppercase; display: block; }
-        .target-val { font-size: 1rem; font-weight: 800; font-family: 'JetBrains Mono', monospace; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 12px; border-top: 1px dashed var(--border); }
-        .stat-card { background: var(--bg); padding: 10px; border-radius: 12px; border: 1px solid var(--border); text-align: center; }
-        .stat-label { font-size: 0.55rem; font-weight: 800; color: var(--text-sec); text-transform: uppercase; }
-        .stat-val { font-size: 0.9rem; font-weight: 900; font-family: 'JetBrains Mono', monospace; display: block; }
+
+        .wrapper { 
+            width: 100%; 
+            max-width: 420px; 
+            margin: auto; 
+        }
+
+        /* Glass Panel */
+        .glass-panel {
+            background: var(--panel-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-main);
+            padding: 24px;
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.6), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        /* Tab Selector - Updated for 4 buttons */
+        .pair-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 5px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dark);
+            padding: 12px 4px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Fields */
+        .input-row {
+            margin-bottom: 14px;
+        }
+        .split-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 14px;
+        }
+
+        .field-box {
+            background: var(--card-surface);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-inner);
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .field-box:focus-within {
+            border-color: var(--accent);
+            background: rgba(11, 15, 36, 0.9);
+            box-shadow: 0 0 25px var(--accent-glow);
+        }
+
+        .field-box label {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.75px;
+        }
+        .field-container {
+            display: flex;
+            align-items: center;
+        }
+        .field-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.35rem;
+            font-weight: 600;
+            width: 100%;
+        }
+        .field-box input::placeholder {
+            color: rgba(255, 255, 255, 0.12);
+        }
+        .field-unit {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        /* Actions */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-top: 24px;
+        }
+        .action-trigger {
+            padding: 16px;
+            border-radius: var(--radius-inner);
+            font-size: 0.9rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .action-trigger:active {
+            transform: scale(0.95);
+        }
+        .action-trigger.is-sell {
+            background: var(--sell-bg);
+            border-color: var(--sell-border);
+            color: var(--sell-color);
+        }
+        .action-trigger.is-sell:hover {
+            background: var(--sell-color);
+            color: #ffffff;
+            box-shadow: 0 12px 30px var(--sell-glow);
+        }
+        .action-trigger.is-buy {
+            background: var(--buy-bg);
+            border-color: var(--buy-border);
+            color: var(--buy-color);
+        }
+        .action-trigger.is-buy:hover {
+            background: var(--buy-color);
+            color: #ffffff;
+            box-shadow: 0 12px 30px var(--buy-glow);
+        }
+
+        /* Output Panel */
+        .output-panel {
+            display: none;
+            margin-top: 20px;
+            animation: panelSlide 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        @keyframes panelSlide {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .cyber-card {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.85) 0%, rgba(8, 12, 24, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-inner);
+            padding: 18px;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.03);
+        }
+
+        .main-showcase {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            margin-bottom: 14px;
+            transition: all 0.2s ease;
+        }
+        .main-showcase:hover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .main-showcase span:not(.toast-label) {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .main-showcase strong {
+            font-size: 2.4rem;
+            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            color: #ffffff;
+            background: linear-gradient(to bottom, #ffffff 60%, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        .price-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .metric-node {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 14px 10px;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s;
+        }
+        .metric-node:hover { 
+            background: rgba(255,255,255,0.04); 
+            border-color: rgba(255,255,255,0.12);
+        }
+        .metric-node .lbl {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .metric-node .val {
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            color: #f8fafc;
+        }
+
+        .pnl-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 14px;
+        }
+        .pnl-block {
+            text-align: center;
+        }
+        .pnl-block .title {
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+        .pnl-block .money {
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Toast Label */
+        .toast-label {
+            position: absolute;
+            top: -10px;
+            right: 50%;
+            transform: translateX(50%) scale(0.9);
+            font-size: 0.6rem;
+            font-weight: 800;
+            background: var(--accent);
+            color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px var(--accent-glow);
+            z-index: 10;
+        }
+        .toast-label.active {
+            opacity: 1;
+            top: -14px;
+            transform: translateX(50%) scale(1);
+        }
+
+        @media (max-width: 360px) {
+            .glass-panel { padding: 18px; }
+            .tab-btn { font-size: 0.75rem; padding: 10px 2px; }
+            .field-box { padding: 12px 14px; }
+            .field-box input { font-size: 1.2rem; }
+            .main-showcase strong { font-size: 2rem; }
+            .metric-node .val, .pnl-block .money { font-size: 1rem; }
+        }
     </style>
 </head>
 <body>
 <div class="wrapper">
-    <form id="calc">
-        <div class="group">
-            <div class="cell">
-                <label>Trading Pair</label>
-                <div class="selector">
-                    <button type="button" class="selector-btn" onclick="setPair('USDJPY', this)">USDJPY</button>
-                    <button type="button" class="selector-btn" onclick="setPair('EURUSD', this)">EURUSD</button>
-                    <button type="button" class="selector-btn" onclick="setPair('XAUUSD', this)">XAUUSD</button>
+    <div class="glass-panel">
+        <form id="calc">
+            <div class="pair-tabs">
+                <button type="button" class="tab-btn" onclick="setPair('GBPUSD', this)">GBPUSD</button>
+                <button type="button" class="tab-btn" onclick="setPair('EURUSD', this)">EURUSD</button>
+                <button type="button" class="tab-btn" onclick="setPair('USDCAD', this)">USDCAD</button>
+                <button type="button" class="tab-btn" onclick="setPair('XAUUSD', this)">XAUUSD</button>
+            </div>
+            
+            <div class="input-row">
+                <div class="field-box">
+                    <label>Account Capital</label>
+                    <div class="field-container">
+                        <input type="number" id="accSize" placeholder="0" inputmode="decimal">
+                        <span class="field-unit">USD</span>
+                    </div>
                 </div>
             </div>
-            <div class="cell"><label>Balance ($)</label><input type="number" id="accSize" value="" placeholder="0" inputmode="decimal"></div>
-        </div>
-        <div class="group">
-            <div class="cell">
-                <label>Risk %</label>
-                <div class="selector">
-                    <button type="button" class="selector-btn" onclick="setRisk(0.5, this)">0.5%</button>
-                    <button type="button" class="selector-btn" onclick="setRisk(1, this)">1%</button>
+            
+            <div class="input-row">
+                <div class="field-box">
+                    <label>Execution Entry Price</label>
+                    <div class="field-container">
+                        <input type="number" id="entry" step="any" placeholder="0.00000" inputmode="decimal">
+                        <span class="field-unit">PRC</span>
+                    </div>
                 </div>
             </div>
-            <div class="cell"><label>Entry Price</label><input type="number" id="entry" step="any" placeholder="0.00" inputmode="decimal"></div>
-        </div>
-        <div class="group">
-            <div class="cell"><label id="slLabel">SL</label><input type="number" id="slInput" placeholder="0" step="any" inputmode="decimal"></div>
-            <div class="cell"><label id="tpLabel">TP</label><input type="number" id="tpInput" placeholder="0" step="any" inputmode="decimal"></div>
-        </div>
-        <div class="execution">
-            <button type="button" class="ex-btn sell" onclick="run('short')">SELL</button>
-            <button type="button" class="ex-btn buy" onclick="run('long')">BUY</button>
-        </div>
-    </form>
-    <div id="receipt" class="receipt">
-        <div class="result-card">
-            <button class="lot-btn" onclick="copyValue('rLot')">
-                <div class="lot-info">
-                    <span>POSITION SIZE (LOTS)</span>
+            
+            <div class="split-row">
+                <div class="field-box">
+                    <label id="slLabel">Stop Loss</label>
+                    <div class="field-container">
+                        <input type="number" id="slInput" placeholder="0.0" step="any" inputmode="decimal">
+                        <span class="field-unit">PIPS</span>
+                    </div>
+                </div>
+                <div class="field-box">
+                    <label id="tpLabel">Take Profit</label>
+                    <div class="field-container">
+                        <input type="number" id="tpInput" placeholder="0.0" step="any" inputmode="decimal">
+                        <span class="field-unit">PIPS</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="actions-grid">
+                <button type="button" class="action-trigger is-sell" onclick="run('short')">Short / Sell</button>
+                <button type="button" class="action-trigger is-buy" onclick="run('long')">Long / Buy</button>
+            </div>
+        </form>
+        
+        <div id="receipt" class="output-panel">
+            <div class="cyber-card">
+                <div class="main-showcase" onclick="copyValue('rLot', this)">
+                    <span class="toast-label">COPIED</span>
+                    <span>POSITION ALLOCATION (LOTS)</span>
                     <strong id="rLot">0.00</strong>
                 </div>
-            </button>
-            <div class="target-group">
-                <div class="target-btn" onclick="copyValue('rTP')">
-                    <span class="target-label">TP PRICE</span>
-                    <span class="target-val" id="rTP">0.00000</span>
+                
+                <div class="price-metrics">
+                    <div class="metric-node" onclick="copyValue('rTP', this)">
+                        <span class="toast-label">COPIED</span>
+                        <span class="lbl">TP TARGET PRICE</span>
+                        <span class="val" id="rTP">0.00000</span>
+                    </div>
+                    <div class="metric-node" onclick="copyValue('rSL', this)">
+                        <span class="toast-label">COPIED</span>
+                        <span class="lbl">SL TARGET PRICE</span>
+                        <span class="val" id="rSL">0.00000</span>
+                    </div>
                 </div>
-                <div class="target-btn" onclick="copyValue('rSL')">
-                    <span class="target-label">SL PRICE</span>
-                    <span class="target-val" id="rSL">0.00000</span>
+                
+                <div class="pnl-row">
+                    <div class="pnl-block">
+                        <span class="title">TOTAL RISK EXPOSURE</span>
+                        <span class="money" id="rRisk" style="color:var(--sell-color)">$0.00</span>
+                    </div>
+                    <div class="pnl-block">
+                        <span class="title">PROSPECTIVE REWARD</span>
+                        <span class="money" id="rReward" style="color:var(--buy-color)">$0.00</span>
+                    </div>
                 </div>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card"><span class="stat-label">RISK (LOSS)</span><span class="stat-val" id="rRisk" style="color:var(--danger)">$0.00</span></div>
-                <div class="stat-card"><span class="stat-label">REWARD (WIN)</span><span class="stat-val" id="rReward" style="color:var(--success)">$0.00</span></div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    let currentPair = 'XAUUSD';
-    let currentRiskPercent = 1.0;
+    let currentPair = 'EURUSD';
+    const currentRiskPercent = 1.0; // Locked strictly at 1.0%
 
     function setPair(p, btn) {
         currentPair = p;
         btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        const slLabel = document.getElementById('slLabel');
-        const tpLabel = document.getElementById('tpLabel');
-        
-        // تنظیم لیبل‌ها برای درک بهتر کاربر
-        if (p === 'XAUUSD') {
-            slLabel.innerText = 'SL ($ Change)';
-            tpLabel.innerText = 'TP ($ Change)';
-        } else {
-            slLabel.innerText = 'SL (Pips)';
-            tpLabel.innerText = 'TP (Pips)';
-        }
     }
 
-    function calculateTrade(accountBalance, riskPercent, entry, slVal, tpVal, pair, side) {
-        const targetRiskUSD = accountBalance * (riskPercent / 100.0);
-        let slPrice, tpPrice, lots;
-
-        if (pair === 'XAUUSD') {
-            // اصلاح قیمت: اگر عدد 5 وارد شود یعنی 5 دلار فاصله از نقطه ورود[cite: 1]
-            slPrice = (side === 'long') ? (entry - slVal) : (entry + slVal);
-            tpPrice = (side === 'long') ? (entry + tpVal) : (entry - tpVal);
-            // در طلا هر 1 دلار حرکت قیمت در 1 لات برابر 100 دلار سود/ضرر است[cite: 1]
-            lots = targetRiskUSD / (slVal * 100);
-        } else {
-            const pipScale = (pair === 'USDJPY') ? 0.01 : 0.0001;
-            slPrice = (side === 'long') ? (entry - (slVal * pipScale)) : (entry + (slVal * pipScale));
-            tpPrice = (side === 'long') ? (entry + (tpVal * pipScale)) : (entry - (tpVal * pipScale));
-            const pipValuePerLot = (pair === 'USDJPY') ? (1000 / entry) : 10.0;
-            lots = targetRiskUSD / (slVal * pipValuePerLot);
+    function getPipValuePerLot(pair, entryPrice) {
+        // برای طلا و جفت‌ارزهای متصل به دلار، ارزش هر پیپ در ۱ لات برابر ۱۰ دلار است
+        if (pair === 'EURUSD' || pair === 'GBPUSD' || pair === 'XAUUSD') {
+            return 10.0;
         }
-
-        lots = Math.round(lots * 100) / 100;
-        if (lots < 0.01) lots = 0.01;
-
-        let finalRisk, finalReward;
-        if (pair === 'XAUUSD') {
-            finalRisk = Math.abs(entry - slPrice) * lots * 100;
-            finalReward = Math.abs(entry - tpPrice) * lots * 100;
-        } else {
-            const currentPipValue = (pair === 'USDJPY') ? (1000 / entry) : 10.0;
-            finalRisk = slVal * lots * currentPipValue;
-            finalReward = tpVal * lots * currentPipValue;
+        if (pair === 'USDCAD') {
+            return 10.0 / entryPrice;
         }
+        return 10.0;
+    }
 
-        return { lots, slPrice, tpPrice, riskUSD: finalRisk, rewardUSD: finalReward };
+    function getPipScale(pair) {
+        // ۱ پیپ در طلا معادل ۰.۰۱ دلار (۱۰ سنت) تغییرات قیمتی است
+        if (pair === 'XAUUSD') {
+            return 0.01;
+        }
+        return 0.0001;
+    }
+
+    function getPriceDecimals(pair) {
+        // قیمت طلا عموماً با ۲ رقم اعشار نمایش داده می‌شود
+        if (pair === 'XAUUSD') {
+            return 2;
+        }
+        return 5;
+    }
+
+    function calculateTrade(accountBalance, riskPercent, entry, slPips, tpPips, pair, side) {
+        if (!accountBalance || accountBalance <= 0 || !entry || entry <= 0 || slPips <= 0) {
+            return null;
+        }
+        
+        // حساب کردن مقدار دقیق ریسک دلاری ۱ درصد
+        const targetRiskUSD = accountBalance * (1.0 / 100.0);
+        const pipScale = getPipScale(pair);
+        
+        let slPrice, tpPrice;
+        if (side === 'long') {
+            slPrice = entry - (slPips * pipScale);
+            tpPrice = entry + (tpPips * pipScale);
+        } else {
+            slPrice = entry + (slPips * pipScale);
+            tpPrice = entry - (tpPips * pipScale);
+        }
+        
+        const pipValuePerLot = getPipValuePerLot(pair, entry);
+        const lots = targetRiskUSD / (slPips * pipValuePerLot);
+        
+        // ذخیره فرمت دقیق ممیزی جهت محاسبات پاداش بدون مغایرت ریاضی
+        const accurateLots = lots;
+        
+        // رند کردن نهایی برای اعمال در متاتریدر
+        let roundedLots = Math.round(lots * 100) / 100;
+        if (roundedLots < 0.01) roundedLots = 0.01;
+        if (roundedLots > 100) roundedLots = 100;
+        
+        // قفل کردن و فیکس کردن نمایش خروجی دقیقاً روی ۱ درصد تراز حساب شما
+        const finalRiskUSD = targetRiskUSD;
+        const finalRewardUSD = tpPips * accurateLots * pipValuePerLot;
+        
+        return {
+            lots: roundedLots,
+            slPrice: slPrice,
+            tpPrice: tpPrice,
+            riskUSD: finalRiskUSD,
+            rewardUSD: finalRewardUSD
+        };
     }
 
     function run(side) {
@@ -187,32 +534,51 @@
         const sl = parseFloat(document.getElementById('slInput').value);
         const tp = parseFloat(document.getElementById('tpInput').value) || 0;
 
-        if (!acc || !ent || isNaN(sl) || sl <= 0) return;
+        if (isNaN(acc) || acc <= 0 || isNaN(ent) || ent <= 0 || isNaN(sl) || sl <= 0) {
+            return;
+        }
 
         const res = calculateTrade(acc, currentRiskPercent, ent, sl, tp, currentPair, side);
+        if (!res) return;
         
         document.getElementById('rLot').innerText = res.lots.toFixed(2);
-        const priceFormat = (currentPair === 'XAUUSD') ? 2 : (currentPair === 'USDJPY' ? 3 : 5);
-        document.getElementById('rTP').innerText = res.tpPrice.toFixed(priceFormat);
-        document.getElementById('rSL').innerText = res.slPrice.toFixed(priceFormat);
+        const decimals = getPriceDecimals(currentPair);
+        document.getElementById('rTP').innerText = res.tpPrice.toFixed(decimals);
+        document.getElementById('rSL').innerText = res.slPrice.toFixed(decimals);
         document.getElementById('rRisk').innerText = `-$${res.riskUSD.toFixed(2)}`;
         document.getElementById('rReward').innerText = `+$${res.rewardUSD.toFixed(2)}`;
-        document.getElementById('receipt').style.display = 'block';
+        
+        const receipt = document.getElementById('receipt');
+        receipt.style.display = 'block';
+        
+        setTimeout(() => {
+            receipt.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 50);
     }
 
-    function setRisk(r, btn) {
-        currentRiskPercent = r;
-        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
-    async function copyValue(id) {
-        try { await navigator.clipboard.writeText(document.getElementById(id).innerText); } catch(e) {}
+    async function copyValue(id, element) {
+        try { 
+            const textToCopy = document.getElementById(id).innerText;
+            await navigator.clipboard.writeText(textToCopy); 
+            
+            const hint = element.querySelector('.toast-label');
+            if (hint) {
+                hint.classList.add('active');
+                setTimeout(() => { hint.classList.remove('active'); }, 1200);
+            }
+        } catch(e) {}
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        setPair('XAUUSD', document.querySelector('.selector button:nth-child(3)'));
-        setRisk(1, document.querySelectorAll('.selector')[1].querySelector('button:nth-child(2)'));
+        const defaultPairBtn = document.querySelectorAll('.pair-tabs')[0].querySelector('button:nth-child(2)');
+        if (defaultPairBtn) setPair('EURUSD', defaultPairBtn);
+        
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(inp => {
+            inp.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') e.preventDefault();
+            });
+        });
     });
 </script>
 </body>
