@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Quantum Risk Engine</title>
+    <title>ماشین حساب حجم معامله</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -28,6 +28,7 @@
             --card-surface: rgba(15, 23, 42, 0.45);
             --radius-main: 32px;
             --radius-inner: 20px;
+            --warning-color: #f59e0b;
         }
 
         * { 
@@ -66,7 +67,6 @@
             margin: auto; 
         }
 
-        /* Glass Panel */
         .glass-panel {
             background: var(--panel-bg);
             backdrop-filter: blur(30px);
@@ -80,10 +80,9 @@
             width: 100%;
         }
 
-        /* Tab Selector - Updated for 4 buttons */
         .pair-tabs {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 6px;
             background: rgba(0, 0, 0, 0.35);
             padding: 5px;
@@ -109,7 +108,6 @@
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Fields */
         .input-row {
             margin-bottom: 14px;
         }
@@ -153,7 +151,7 @@
             border: none;
             outline: none;
             color: var(--text-main);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             font-size: 1.35rem;
             font-weight: 600;
             width: 100%;
@@ -169,7 +167,6 @@
             margin-left: 6px;
         }
 
-        /* Actions */
         .actions-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -211,7 +208,6 @@
             box-shadow: 0 12px 30px var(--buy-glow);
         }
 
-        /* Output Panel */
         .output-panel {
             display: none;
             margin-top: 20px;
@@ -263,6 +259,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             display: block;
+        }
+        .warning-badge {
+            font-size: 0.7rem;
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+            border-radius: 20px;
+            padding: 4px 10px;
+            margin-top: 6px;
+            display: inline-block;
         }
 
         .price-metrics {
@@ -324,7 +329,6 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Toast Label */
         .toast-label {
             position: absolute;
             top: -10px;
@@ -362,75 +366,71 @@
 <body>
 <div class="wrapper">
     <div class="glass-panel">
-        <form id="calc">
-            <div class="pair-tabs">
-                <button type="button" class="tab-btn" onclick="setPair('GBPUSD', this)">GBPUSD</button>
-                <button type="button" class="tab-btn" onclick="setPair('EURUSD', this)">EURUSD</button>
-                <button type="button" class="tab-btn" onclick="setPair('USDCAD', this)">USDCAD</button>
-                <button type="button" class="tab-btn" onclick="setPair('XAUUSD', this)">XAUUSD</button>
-            </div>
-            
-            <div class="input-row">
-                <div class="field-box">
-                    <label>Account Capital</label>
-                    <div class="field-container">
-                        <input type="number" id="accSize" placeholder="0" inputmode="decimal">
-                        <span class="field-unit">USD</span>
-                    </div>
+        <div class="pair-tabs">
+            <button type="button" class="tab-btn" data-pair="EURUSD">EURUSD</button>
+            <button type="button" class="tab-btn" data-pair="USDJPY">USDJPY</button>
+        </div>
+        
+        <div class="input-row">
+            <div class="field-box">
+                <label>Balance (USD)</label>
+                <div class="field-container">
+                    <input type="number" id="accSize" placeholder="0" inputmode="decimal">
+                    <span class="field-unit">USD</span>
                 </div>
             </div>
-            
-            <div class="input-row">
-                <div class="field-box">
-                    <label>Execution Entry Price</label>
-                    <div class="field-container">
-                        <input type="number" id="entry" step="any" placeholder="0.00000" inputmode="decimal">
-                        <span class="field-unit">PRC</span>
-                    </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="field-box">
+                <label>Entry Price</label>
+                <div class="field-container">
+                    <input type="number" id="entry" step="any" placeholder="0.00000" inputmode="decimal">
+                    <span class="field-unit">PRC</span>
                 </div>
             </div>
-            
-            <div class="split-row">
-                <div class="field-box">
-                    <label id="slLabel">Stop Loss</label>
-                    <div class="field-container">
-                        <input type="number" id="slInput" placeholder="0.0" step="any" inputmode="decimal">
-                        <span class="field-unit">PIPS</span>
-                    </div>
-                </div>
-                <div class="field-box">
-                    <label id="tpLabel">Take Profit</label>
-                    <div class="field-container">
-                        <input type="number" id="tpInput" placeholder="0.0" step="any" inputmode="decimal">
-                        <span class="field-unit">PIPS</span>
-                    </div>
+        </div>
+        
+        <div class="split-row">
+            <div class="field-box">
+                <label id="slLabel">SL (Pips)</label>
+                <div class="field-container">
+                    <input type="number" id="slInput" placeholder="0.0" step="any" inputmode="decimal">
+                    <span class="field-unit">PIPS</span>
                 </div>
             </div>
-            
-            <div class="actions-grid">
-                <button type="button" class="action-trigger is-sell" onclick="run('short')">Short / Sell</button>
-                <button type="button" class="action-trigger is-buy" onclick="run('long')">Long / Buy</button>
+            <div class="field-box">
+                <label id="tpLabel">TP (Pips)</label>
+                <div class="field-container">
+                    <input type="number" id="tpInput" placeholder="0.0" step="any" inputmode="decimal">
+                    <span class="field-unit">PIPS</span>
+                </div>
             </div>
-        </form>
+        </div>
+        
+        <div class="actions-grid">
+            <button type="button" class="action-trigger is-sell" id="sellBtn">Short</button>
+            <button type="button" class="action-trigger is-buy" id="buyBtn">Long</button>
+        </div>
         
         <div id="receipt" class="output-panel">
             <div class="cyber-card">
-                <div class="main-showcase" onclick="copyValue('rLot', this)">
+                <div class="main-showcase" id="lotCopyZone">
                     <span class="toast-label">COPIED</span>
-                    <span>POSITION ALLOCATION (LOTS)</span>
+                    <span>POSITION SIZE (LOTS)</span>
                     <strong id="rLot">0.00</strong>
                 </div>
                 
                 <div class="price-metrics">
-                    <div class="metric-node" onclick="copyValue('rTP', this)">
-                        <span class="toast-label">COPIED</span>
-                        <span class="lbl">TP TARGET PRICE</span>
-                        <span class="val" id="rTP">0.00000</span>
-                    </div>
-                    <div class="metric-node" onclick="copyValue('rSL', this)">
+                    <div class="metric-node" id="slCopyZone">
                         <span class="toast-label">COPIED</span>
                         <span class="lbl">SL TARGET PRICE</span>
                         <span class="val" id="rSL">0.00000</span>
+                    </div>
+                    <div class="metric-node" id="tpCopyZone">
+                        <span class="toast-label">COPIED</span>
+                        <span class="lbl">TP TARGET PRICE</span>
+                        <span class="val" id="rTP">0.00000</span>
                     </div>
                 </div>
                 
@@ -444,6 +444,7 @@
                         <span class="money" id="rReward" style="color:var(--buy-color)">$0.00</span>
                     </div>
                 </div>
+                <div id="warningMsg" style="text-align:center; margin-top:12px; font-size:0.7rem;"></div>
             </div>
         </div>
     </div>
@@ -451,132 +452,214 @@
 
 <script>
     let currentPair = 'EURUSD';
-    const currentRiskPercent = 1.0; // Locked strictly at 1.0%
-
-    function setPair(p, btn) {
-        currentPair = p;
-        btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-    }
-
+    const FIXED_RISK_PERCENT = 1.0;
+    const MIN_LOT = 0.01;
+    const LOT_STEP = 0.01;
+    const CONTRACT_SIZE = 100000;
+    const LEVERAGE = 100;
+    
     function getPipValuePerLot(pair, entryPrice) {
-        // برای طلا و جفت‌ارزهای متصل به دلار، ارزش هر پیپ در ۱ لات برابر ۱۰ دلار است
-        if (pair === 'EURUSD' || pair === 'GBPUSD' || pair === 'XAUUSD') {
-            return 10.0;
+        if (pair === 'USDJPY') {
+            // برای جفت ارزهایی که ارز ثانویه آن‌ها JPY است: (0.01 / Entry Price) * 100,000
+            return (0.01 / entryPrice) * CONTRACT_SIZE;
         }
-        if (pair === 'USDCAD') {
-            return 10.0 / entryPrice;
-        }
-        return 10.0;
+        return 10.0; // برای EURUSD مقدار ثابت 10 دلار به ازای هر لات
     }
-
+    
     function getPipScale(pair) {
-        // ۱ پیپ در طلا معادل ۰.۰۱ دلار (۱۰ سنت) تغییرات قیمتی است
-        if (pair === 'XAUUSD') {
+        if (pair === 'USDJPY') {
             return 0.01;
         }
         return 0.0001;
     }
-
+    
     function getPriceDecimals(pair) {
-        // قیمت طلا عموماً با ۲ رقم اعشار نمایش داده می‌شود
-        if (pair === 'XAUUSD') {
-            return 2;
+        if (pair === 'USDJPY') {
+            return 3;
         }
         return 5;
     }
-
-    function calculateTrade(accountBalance, riskPercent, entry, slPips, tpPips, pair, side) {
-        if (!accountBalance || accountBalance <= 0 || !entry || entry <= 0 || slPips <= 0) {
+    
+    function calculateRequiredMargin(lots, accountBalance, pair, entryPrice) {
+        if (pair === 'USDJPY') {
+            // مارجین برای ارز پایه USD: (Lots * Contract Size) / Leverage
+            return (lots * CONTRACT_SIZE) / LEVERAGE;
+        }
+        // برای EURUSD: Base currency یورو است پس مارجین به دلار می‌شود Lots * Contract Size * Entry Price / Leverage
+        return ((lots * CONTRACT_SIZE) / LEVERAGE) * entryPrice;
+    }
+    
+    function calculateMaxAllowedLots(accountBalance, pair, entryPrice) {
+        let maxLots;
+        if (pair === 'USDJPY') {
+            maxLots = (accountBalance * LEVERAGE) / CONTRACT_SIZE;
+        } else {
+            maxLots = (accountBalance * LEVERAGE) / (CONTRACT_SIZE * entryPrice);
+        }
+        return Math.floor(maxLots / LOT_STEP) * LOT_STEP;
+    }
+    
+    function calculateTrade(accountBalance, riskPercent, entryPrice, slPips, tpPips, pair, side) {
+        if (!accountBalance || accountBalance <= 0 || !entryPrice || entryPrice <= 0 || slPips <= 0) {
             return null;
         }
         
-        // حساب کردن مقدار دقیق ریسک دلاری ۱ درصد
-        const targetRiskUSD = accountBalance * (1.0 / 100.0);
-        const pipScale = getPipScale(pair);
+        const riskAmountUSD = accountBalance * (riskPercent / 100.0);
+        const pipValuePerLot = getPipValuePerLot(pair, entryPrice);
         
+        let rawLots = riskAmountUSD / (slPips * pipValuePerLot);
+        
+        let roundedLots = Math.floor(rawLots / LOT_STEP) * LOT_STEP;
+        if (roundedLots < MIN_LOT) roundedLots = MIN_LOT;
+        
+        const maxAllowedByMargin = calculateMaxAllowedLots(accountBalance, pair, entryPrice);
+        let finalLots = Math.min(roundedLots, maxAllowedByMargin);
+        if (finalLots < MIN_LOT) finalLots = MIN_LOT;
+        
+        finalLots = Math.floor(finalLots / LOT_STEP) * LOT_STEP;
+        if (finalLots < MIN_LOT) finalLots = MIN_LOT;
+        
+        const pipScale = getPipScale(pair);
         let slPrice, tpPrice;
         if (side === 'long') {
-            slPrice = entry - (slPips * pipScale);
-            tpPrice = entry + (tpPips * pipScale);
+            slPrice = entryPrice - (slPips * pipScale);
+            tpPrice = entryPrice + (tpPips * pipScale);
         } else {
-            slPrice = entry + (slPips * pipScale);
-            tpPrice = entry - (tpPips * pipScale);
+            slPrice = entryPrice + (slPips * pipScale);
+            tpPrice = entryPrice - (tpPips * pipScale);
         }
         
-        const pipValuePerLot = getPipValuePerLot(pair, entry);
-        const lots = targetRiskUSD / (slPips * pipValuePerLot);
+        const actualRiskUSD = finalLots * slPips * pipValuePerLot;
+        let actualRewardUSD = finalLots * tpPips * pipValuePerLot;
+        if (tpPips <= 0) actualRewardUSD = 0;
         
-        // ذخیره فرمت دقیق ممیزی جهت محاسبات پاداش بدون مغایرت ریاضی
-        const accurateLots = lots;
-        
-        // رند کردن نهایی برای اعمال در متاتریدر
-        let roundedLots = Math.round(lots * 100) / 100;
-        if (roundedLots < 0.01) roundedLots = 0.01;
-        if (roundedLots > 100) roundedLots = 100;
-        
-        // قفل کردن و فیکس کردن نمایش خروجی دقیقاً روی ۱ درصد تراز حساب شما
-        const finalRiskUSD = targetRiskUSD;
-        const finalRewardUSD = tpPips * accurateLots * pipValuePerLot;
+        const marginRequired = calculateRequiredMargin(finalLots, accountBalance, pair, entryPrice);
         
         return {
-            lots: roundedLots,
+            lots: finalLots,
             slPrice: slPrice,
             tpPrice: tpPrice,
-            riskUSD: finalRiskUSD,
-            rewardUSD: finalRewardUSD
+            riskUSD: actualRiskUSD,
+            rewardUSD: actualRewardUSD,
+            targetRisk: riskAmountUSD,
+            rawLots: rawLots,
+            pipValue: pipValuePerLot,
+            marginRequired: marginRequired,
+            maxAllowedLots: maxAllowedByMargin
         };
     }
-
+    
     function run(side) {
-        const acc = parseFloat(document.getElementById('accSize').value);
-        const ent = parseFloat(document.getElementById('entry').value);
-        const sl = parseFloat(document.getElementById('slInput').value);
-        const tp = parseFloat(document.getElementById('tpInput').value) || 0;
-
-        if (isNaN(acc) || acc <= 0 || isNaN(ent) || ent <= 0 || isNaN(sl) || sl <= 0) {
+        const accBalance = parseFloat(document.getElementById('accSize').value);
+        const entryPrice = parseFloat(document.getElementById('entry').value);
+        const slPipsInput = parseFloat(document.getElementById('slInput').value);
+        const tpPipsInput = parseFloat(document.getElementById('tpInput').value);
+        
+        if (isNaN(accBalance) || accBalance <= 0) {
+            const receiptDiv = document.getElementById('receipt');
+            receiptDiv.style.display = 'none';
             return;
         }
-
-        const res = calculateTrade(acc, currentRiskPercent, ent, sl, tp, currentPair, side);
-        if (!res) return;
+        if (isNaN(entryPrice) || entryPrice <= 0) return;
+        if (isNaN(slPipsInput) || slPipsInput <= 0) return;
+        const tpPips = (isNaN(tpPipsInput) || tpPipsInput < 0) ? 0 : tpPipsInput;
         
-        document.getElementById('rLot').innerText = res.lots.toFixed(2);
+        const result = calculateTrade(accBalance, FIXED_RISK_PERCENT, entryPrice, slPipsInput, tpPips, currentPair, side);
+        if (!result) return;
+        
+        document.getElementById('rLot').innerText = result.lots.toFixed(2);
         const decimals = getPriceDecimals(currentPair);
-        document.getElementById('rTP').innerText = res.tpPrice.toFixed(decimals);
-        document.getElementById('rSL').innerText = res.slPrice.toFixed(decimals);
-        document.getElementById('rRisk').innerText = `-$${res.riskUSD.toFixed(2)}`;
-        document.getElementById('rReward').innerText = `+$${res.rewardUSD.toFixed(2)}`;
+        document.getElementById('rTP').innerText = result.tpPrice.toFixed(decimals);
+        document.getElementById('rSL').innerText = result.slPrice.toFixed(decimals);
+        document.getElementById('rRisk').innerHTML = `-$${result.riskUSD.toFixed(2)}`;
+        document.getElementById('rReward').innerHTML = `+$${result.rewardUSD.toFixed(2)}`;
         
-        const receipt = document.getElementById('receipt');
-        receipt.style.display = 'block';
+        const warningDiv = document.getElementById('warningMsg');
+        let warningMessages = [];
         
+        if (result.rawLots < MIN_LOT && result.lots === MIN_LOT) {
+            warningMessages.push('⚠️ حداقل لات 0.01 اعمال شد (ریسک واقعی کمتر از 1%)');
+        }
+        
+        if (result.marginRequired > accBalance * 0.95) {
+            warningMessages.push('⚠️ مارجین مصرفی نزدیک به کل سرمایه است');
+        }
+        
+        if (result.lots >= result.maxAllowedLots && result.maxAllowedLots > 0 && result.rawLots > result.maxAllowedLots) {
+            warningMessages.push('⚠️ حجم معامله به دلیل محدودیت مارجین کاهش یافت');
+        }
+        
+        const riskDifference = Math.abs(result.riskUSD - result.targetRisk);
+        if (riskDifference > 0.5 && result.lots > MIN_LOT) {
+            warningMessages.push(`⚠️ ریسک واقعی $${result.riskUSD.toFixed(2)} (هدف: $${result.targetRisk.toFixed(2)})`);
+        }
+        
+        if (warningMessages.length > 0) {
+            warningDiv.innerHTML = `<span class="warning-badge">${warningMessages[0]}</span>`;
+        } else {
+            warningDiv.innerHTML = '';
+        }
+        
+        const receiptDiv = document.getElementById('receipt');
+        receiptDiv.style.display = 'block';
         setTimeout(() => {
-            receipt.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 50);
+            receiptDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 60);
     }
-
-    async function copyValue(id, element) {
-        try { 
-            const textToCopy = document.getElementById(id).innerText;
-            await navigator.clipboard.writeText(textToCopy); 
-            
-            const hint = element.querySelector('.toast-label');
-            if (hint) {
-                hint.classList.add('active');
-                setTimeout(() => { hint.classList.remove('active'); }, 1200);
-            }
-        } catch(e) {}
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const defaultPairBtn = document.querySelectorAll('.pair-tabs')[0].querySelector('button:nth-child(2)');
-        if (defaultPairBtn) setPair('EURUSD', defaultPairBtn);
+    
+    function setPair(pair, btnElement) {
+        currentPair = pair;
+        const container = btnElement.parentElement;
+        if (container) {
+            const btns = container.querySelectorAll('.tab-btn');
+            btns.forEach(b => b.classList.remove('active'));
+        }
+        btnElement.classList.add('active');
         
-        const inputs = document.querySelectorAll('input');
-        inputs.forEach(inp => {
-            inp.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') e.preventDefault();
+        const slLabel = document.getElementById('slLabel');
+        const tpLabel = document.getElementById('tpLabel');
+        slLabel.innerText = 'SL (Pips)';
+        tpLabel.innerText = 'TP (Pips)';
+    }
+    
+    async function copyValue(elementId, parentElement) {
+        try {
+            const valueText = document.getElementById(elementId).innerText;
+            await navigator.clipboard.writeText(valueText);
+            const toast = parentElement.querySelector('.toast-label');
+            if (toast) {
+                toast.classList.add('active');
+                setTimeout(() => toast.classList.remove('active'), 1200);
+            }
+        } catch (err) {}
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const defaultTab = document.querySelector('[data-pair="EURUSD"]');
+        if (defaultTab) setPair('EURUSD', defaultTab);
+        
+        const sellBtn = document.getElementById('sellBtn');
+        const buyBtn = document.getElementById('buyBtn');
+        
+        sellBtn.addEventListener('click', () => run('short'));
+        buyBtn.addEventListener('click', () => run('long'));
+        
+        const lotZone = document.getElementById('lotCopyZone');
+        const tpZone = document.getElementById('tpCopyZone');
+        const slZone = document.getElementById('slCopyZone');
+        
+        if (lotZone) lotZone.addEventListener('click', (e) => {
+            if (e.target.closest('.toast-label')) return;
+            copyValue('rLot', lotZone);
+        });
+        if (tpZone) tpZone.addEventListener('click', () => copyValue('rTP', tpZone));
+        if (slZone) slZone.addEventListener('click', () => copyValue('rSL', slZone));
+        
+        const tabs = document.querySelectorAll('.tab-btn');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                const pair = tab.getAttribute('data-pair');
+                if (pair) setPair(pair, tab);
             });
         });
     });
